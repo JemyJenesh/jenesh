@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 export type Bingo = {
   id: string;
@@ -19,4 +21,16 @@ export async function createBingo(hostID: string): Promise<Bingo> {
 export async function getBingo(id: string): Promise<Bingo> {
   const res = await axios.get(`/api/bingos/${id}`);
   return res.data;
+}
+
+export function useCreateBingo() {
+  const navigate = useNavigate();
+  const mutation = useMutation({
+    mutationFn: createBingo,
+    onSuccess: (data) => {
+      if (data.id) navigate(`/bingos/${data.id}/room`);
+    },
+  });
+
+  return mutation;
 }
