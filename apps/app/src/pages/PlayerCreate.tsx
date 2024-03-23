@@ -1,4 +1,4 @@
-import { Player, useAppStore } from "@/store";
+import { useAppStore } from "@/store";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import {
   Avatar,
@@ -13,7 +13,6 @@ import {
   Typography,
   radioClasses,
 } from "@mui/joy";
-import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -28,10 +27,10 @@ for (let i = 1; i <= 20; i++) {
 
 export function PlayerCreate() {
   const player = useAppStore((state) => state.player);
-  const setPlayer = useAppStore((state) => state.setPlayer);
+  const loading = useAppStore((state) => state.isCreating);
+  const createPlayer = useAppStore((state) => state.createPlayer);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     avatar: "",
@@ -46,20 +45,11 @@ export function PlayerCreate() {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    axios
-      .post<Partial<Player>, AxiosResponse<Player>>("/api/players", form)
-      .then((response) => {
-        setPlayer(response.data);
-        const redirect = searchParams.get("r");
-        navigate(redirect ?? "/");
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    const redirect = () => {
+      const redirect = searchParams.get("r");
+      navigate(redirect ?? "/");
+    };
+    createPlayer(form, redirect);
   };
 
   if (player && !loading) {
