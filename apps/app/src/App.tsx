@@ -1,41 +1,21 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { Router } from "@/components/Router";
+import CssBaseline from "@mui/joy/CssBaseline";
+import { CssVarsProvider } from "@mui/joy/styles";
+import { useEffect } from "react";
+import { useAppStore } from "./store";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [greeting, setGreeting] = useState("");
+  const fetchPlayer = useAppStore((state) => state.fetchPlayer);
 
   useEffect(() => {
-    fetch("/api")
-      .then((res) => res.text())
-      .then(setGreeting);
+    fetchPlayer();
   }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>{greeting}</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <CssVarsProvider>
+      <CssBaseline />
+      <Router />
+    </CssVarsProvider>
   );
 }
 
