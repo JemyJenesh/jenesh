@@ -7,5 +7,6 @@ import { PlayersService } from './players.service';
   imports: [InMemoryDBModule.forFeature('players')],
   controllers: [PlayersController],
   providers: [PlayersService],
+  exports: [PlayersService],
 })
 export class PlayersModule {}

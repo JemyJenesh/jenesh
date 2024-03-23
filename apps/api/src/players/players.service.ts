@@ -8,8 +8,7 @@ export class PlayersService {
   constructor(private inMemoryDB: InMemoryDBService<Player>) {}
 
   create(createPlayerDto: CreatePlayerDto) {
-    const player = this.inMemoryDB.create(createPlayerDto);
-    return player;
+    return this.inMemoryDB.create(createPlayerDto);
   }
 
   findAll() {

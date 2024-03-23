@@ -45,9 +45,9 @@ export class PlayersController {
         message: 'Player not found',
       });
     }
-    const newPlayer = { ...player, ...updatePlayerDto };
-    this.playersService.update(newPlayer);
-    return newPlayer;
+    const updatedPlayer = { ...player, ...updatePlayerDto };
+    this.playersService.update(updatedPlayer);
+    return updatedPlayer;
   }
 
   @Delete(':id')
