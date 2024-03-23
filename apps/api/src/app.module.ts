@@ -13,6 +13,9 @@ import { PlayersModule } from './players/players.module';
       rootPath: join(__dirname, '..', 'static'),
       serveRoot: '/static',
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../..', 'app', 'dist'),
+    }),
     PlayersModule,
     BingosModule,
     BoardsModule,
