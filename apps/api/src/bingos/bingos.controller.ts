@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { BoardsService } from 'src/boards/boards.service';
 import { PlayersService } from 'src/players/players.service';
 import { BingosService } from './bingos.service';
 import { CreateBingoDto } from './dto/create-bingo.dto';
@@ -18,6 +19,7 @@ export class BingosController {
   constructor(
     private readonly bingosService: BingosService,
     private readonly playersService: PlayersService,
+    private readonly boardsService: BoardsService,
   ) {}
 
   @Post()
@@ -28,7 +30,12 @@ export class BingosController {
         message: 'Host not found',
       });
     }
-    return this.bingosService.create(createBingoDto);
+    const bingo = this.bingosService.create(createBingoDto);
+    this.boardsService.create({
+      bingoID: bingo.id,
+      playerID: host.id,
+    });
+    return bingo;
   }
 
   @Get()
