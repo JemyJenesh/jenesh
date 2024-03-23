@@ -22,7 +22,7 @@ export class BingosController {
 
   @Post()
   create(@Body() createBingoDto: CreateBingoDto) {
-    const host = this.playersService.findOne(createBingoDto.host);
+    const host = this.playersService.findOne(createBingoDto.hostID);
     if (!host) {
       throw new NotFoundException({
         message: 'Host not found',

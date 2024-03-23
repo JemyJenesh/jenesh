@@ -11,7 +11,7 @@ export class BingosService {
     const newBingo = {
       ...bingo,
       history: [],
-      players: [bingo.host],
+      playerIDs: [bingo.hostID],
       state: 'waiting' as const,
     };
     return this.inMemoryDB.create(newBingo);

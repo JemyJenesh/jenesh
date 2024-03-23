@@ -2,8 +2,8 @@ import { IsEnum, IsOptional } from 'class-validator';
 
 export class UpdateBingoDto {
   history?: string[];
-  players?: string[];
-  winner?: string;
+  playerIDs?: string[];
+  winnerID?: string;
 
   @IsOptional()
   @IsEnum(['waiting', 'started', 'over'], {
