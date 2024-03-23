@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BingosModule } from './bingos/bingos.module';
@@ -6,7 +8,15 @@ import { BoardsModule } from './boards/boards.module';
 import { PlayersModule } from './players/players.module';
 
 @Module({
-  imports: [PlayersModule, BingosModule, BoardsModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'static'),
+      serveRoot: '/static',
+    }),
+    PlayersModule,
+    BingosModule,
+    BoardsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
