@@ -1,7 +1,6 @@
 import { InMemoryDBService } from '@nestjs-addons/in-memory-db';
 import { Injectable } from '@nestjs/common';
 import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Player } from './entities/player.entity';
 
 @Injectable()
@@ -21,11 +20,8 @@ export class PlayersService {
     return this.inMemoryDB.get(id);
   }
 
-  update(id: string, updatePlayerDto: UpdatePlayerDto) {
-    return this.inMemoryDB.update({
-      id,
-      ...updatePlayerDto,
-    });
+  update(player: Player) {
+    return this.inMemoryDB.update(player);
   }
 
   remove(id: string) {

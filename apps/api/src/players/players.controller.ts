@@ -46,7 +46,7 @@ export class PlayersController {
       });
     }
     const newPlayer = { ...player, ...updatePlayerDto };
-    this.playersService.update(id, newPlayer);
+    this.playersService.update(newPlayer);
     return newPlayer;
   }
 
