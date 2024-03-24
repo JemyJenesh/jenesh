@@ -1,9 +1,9 @@
-import { useAppStore } from "@/store";
+import { usePlayer } from "@/store";
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
 export function PrivateRoute({ children }: { children: ReactNode }) {
-  const player = useAppStore((state) => state.player);
+  const { player } = usePlayer();
 
   if (!player) {
     const pathname = window.location.pathname;
