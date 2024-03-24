@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
-import { Player } from ".";
+import { Player, usePlayer } from ".";
 
 export type Bingo = {
   id: string;
@@ -12,6 +12,16 @@ export type Bingo = {
   playerIDs: string[];
   winnerID?: string;
   state: "waiting" | "started" | "over";
+};
+
+export type Board = {
+  id: string;
+  spots: {
+    value: string;
+    marked: boolean;
+  }[];
+  playerID: string;
+  bingoID: string;
 };
 
 export function useBingoCreate() {
@@ -57,6 +67,27 @@ export function useBingo(id: string) {
   return query;
 }
 
+export type GetBingoWithPlayersBoardResponse = {
+  bingo: Bingo;
+  board: Board;
+};
+export function useBingoWithPlayersBoard(id: string) {
+  const { player } = usePlayer();
+  const getBingo = async (
+    id: string
+  ): Promise<GetBingoWithPlayersBoardResponse> => {
+    const res = await axios.get(`/api/bingos/${id}/board/${player?.id}`);
+    return res.data;
+  };
+
+  const query = useQuery({
+    queryKey: ["bingos", "board", id],
+    queryFn: () => getBingo(id!),
+  });
+
+  return query;
+}
+
 export const useBingoSubscription = (id: string) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -87,6 +118,24 @@ export const useBingoSubscription = (id: string) => {
 
     socket.current.on("bingo-started", () => {
       navigate(`/bingos/${id}`);
+    });
+
+    socket.current.on("bingo", () => {
+      alert("wnner");
+    });
+
+    socket.current.on("new-bingo-number", (number) => {
+      queryClient.setQueriesData(["bingos", "board", id], (prev: any) => {
+        if (prev) {
+          const { bingo, board } = prev as GetBingoWithPlayersBoardResponse;
+          const data: GetBingoWithPlayersBoardResponse = {
+            board,
+            bingo: { ...bingo, history: [...bingo.history, number] },
+          };
+          return data;
+        }
+        return prev;
+      });
     });
 
     return () => {

@@ -1,3 +1,4 @@
+export * from "./BingoBoard";
 export * from "./CopyButton";
 export * from "./GameCard";
 export * from "./PlayerCard";

@@ -55,6 +55,21 @@ export class BingosController {
     return { bingo, players };
   }
 
+  @Get(':id/board/:playerID')
+  findOneWithPlayersBoard(
+    @Param('id') id: string,
+    @Param('playerID') playerID: string,
+  ) {
+    const bingo = this.bingosService.findOne(id);
+    if (!bingo) {
+      throw new NotFoundException({
+        message: 'Bingo not found',
+      });
+    }
+    const board = this.boardsService.findPlayersBoard(id, playerID);
+    return { bingo, board };
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBingoDto: UpdateBingoDto) {
     const bingo = this.bingosService.findOne(id);

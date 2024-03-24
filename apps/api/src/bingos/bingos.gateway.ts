@@ -4,6 +4,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { BoardsService } from 'src/boards/boards.service';
+import { Board } from 'src/boards/entities/board.entity';
 import { PlayersService } from 'src/players/players.service';
 import { BingosService } from './bingos.service';
 
@@ -13,12 +15,15 @@ import { BingosService } from './bingos.service';
   },
 })
 export class BingosGetaway {
+  intervalIDs: { [bingoID: string]: NodeJS.Timeout } = {};
+
   @WebSocketServer()
   server: Server;
 
   constructor(
     private readonly bingosService: BingosService,
     private readonly playersService: PlayersService,
+    private readonly boardsService: BoardsService,
   ) {}
 
   @SubscribeMessage('subscribe-bingo')
@@ -34,6 +39,10 @@ export class BingosGetaway {
       ...bingo,
       playerIDs: [...bingo.playerIDs, playerID],
     };
+    this.boardsService.create({
+      bingoID: bingo.id,
+      playerID,
+    });
     this.bingosService.update(newBingo);
     const player = this.playersService.findOne(playerID);
     client.nsp.to(data.bingoID).emit('player-joined', player);
@@ -49,5 +58,38 @@ export class BingosGetaway {
     };
     this.bingosService.update(newBingo);
     client.nsp.to(data.bingoID).emit('bingo-started');
+
+    let history = bingo.history;
+
+    this.intervalIDs[bingoID] = setInterval(() => {
+      let updatedBingo = this.bingosService.findOne(bingo.id);
+      if (history.length < 75 || updatedBingo.state !== 'over') {
+        const newNumber = this.boardsService._pickBingoNumber(history);
+        history = [...history, newNumber];
+        this.bingosService.update({ ...updatedBingo, history });
+        client.nsp.to(data.bingoID).emit('new-bingo-number', newNumber);
+      } else {
+        clearInterval(this.intervalIDs[bingoID]);
+      }
+    }, 1000);
+  }
+
+  @SubscribeMessage('update-board')
+  handleUpdateBoard(client: Socket, data: { board: Board }) {
+    const { board } = data;
+    this.boardsService.update(board);
+    const isBingo = this.boardsService._checkForBingo(board);
+    if (isBingo) {
+      clearInterval(this.intervalIDs[board.bingoID]);
+      const bingo = this.bingosService.findOne(board.bingoID);
+      this.bingosService.update({
+        ...bingo,
+        state: 'over',
+        winnerID: board.playerID,
+      });
+      client.nsp.to(board.bingoID).emit('bingo', {
+        winner: board.playerID,
+      });
+    }
   }
 }
