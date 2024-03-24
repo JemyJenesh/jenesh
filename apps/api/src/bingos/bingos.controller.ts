@@ -51,7 +51,8 @@ export class BingosController {
         message: 'Bingo not found',
       });
     }
-    return bingo;
+    const players = this.playersService.findMany(bingo.playerIDs);
+    return { bingo, players };
   }
 
   @Patch(':id')

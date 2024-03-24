@@ -19,6 +19,10 @@ export class PlayersService {
     return this.inMemoryDB.get(id);
   }
 
+  findMany(ids: string[]) {
+    return this.inMemoryDB.getMany(ids);
+  }
+
   update(player: Player) {
     return this.inMemoryDB.update(player);
   }
