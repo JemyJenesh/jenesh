@@ -1,4 +1,4 @@
-import { useAppStore } from "@/store";
+import { usePlayer, usePlayerCreate } from "@/store";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import {
   Avatar,
@@ -14,7 +14,7 @@ import {
   radioClasses,
 } from "@mui/joy";
 import { useState } from "react";
-import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 let avatars: string[] = [];
 
@@ -26,11 +26,8 @@ for (let i = 1; i <= 20; i++) {
 }
 
 export function PlayerCreate() {
-  const player = useAppStore((state) => state.player);
-  const loading = useAppStore((state) => state.isCreating);
-  const createPlayer = useAppStore((state) => state.createPlayer);
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const { player } = usePlayer();
+  const { mutate, isLoading } = usePlayerCreate();
   const [form, setForm] = useState({
     name: "",
     avatar: "",
@@ -45,14 +42,10 @@ export function PlayerCreate() {
   };
 
   const handleSubmit = async () => {
-    const redirect = () => {
-      const redirect = searchParams.get("r");
-      navigate(redirect ?? "/");
-    };
-    createPlayer(form, redirect);
+    mutate(form);
   };
 
-  if (player && !loading) {
+  if (player && !isLoading) {
     return <Navigate to="/" />;
   }
 
@@ -165,7 +158,11 @@ export function PlayerCreate() {
         justifyContent="flex-end"
         alignItems="flex-start"
       >
-        <Button onClick={handleSubmit} loading={loading} disabled={isDisabled}>
+        <Button
+          onClick={handleSubmit}
+          loading={isLoading}
+          disabled={isDisabled}
+        >
           Create
         </Button>
       </Stack>
