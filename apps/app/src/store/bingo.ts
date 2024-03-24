@@ -1,6 +1,8 @@
 import axios from "@/services/Axios";
-import { useMutation, useQuery } from "react-query";
+import { useEffect, useRef } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { Socket, io } from "socket.io-client";
 import { Player } from ".";
 
 export type Bingo = {
@@ -54,3 +56,40 @@ export function useBingo(id: string) {
 
   return query;
 }
+
+export const useBingoSubscription = (id: string) => {
+  const queryClient = useQueryClient();
+  let socket = useRef<Socket>();
+
+  useEffect(() => {
+    socket.current = io(
+      process.env.NODE_ENV === "production" ? "" : "http://localhost:3000"
+    );
+
+    socket.current.on("connect", () => {
+      socket.current?.emit("subscribe-bingo", { bingoID: id });
+    });
+
+    socket.current.on("player-joined", (player: Player) => {
+      queryClient.setQueriesData(["bingos", id], (prev: any) => {
+        if (prev) {
+          const { bingo, players } = prev as GetBingoResponse;
+          const data: GetBingoResponse = {
+            bingo: { ...bingo, playerIDs: [...bingo.playerIDs, player.id] },
+            players: [...players, player],
+          };
+          return data;
+        }
+        return prev;
+      });
+    });
+
+    return () => {
+      socket.current?.close();
+    };
+  }, [queryClient]);
+
+  return (event: string, data: any) => {
+    socket.current?.emit(event, data);
+  };
+};

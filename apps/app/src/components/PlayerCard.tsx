@@ -13,7 +13,7 @@ export function PlayerCard({ player }: { player: Player }) {
     <Card
       variant={isMe ? "soft" : "outlined"}
       sx={{
-        width: 200,
+        width: 120,
       }}
     >
       <Box
@@ -23,10 +23,10 @@ export function PlayerCard({ player }: { player: Player }) {
           alignItems: "center",
         }}
       >
-        <img src={avatar} />
+        <img src={avatar} height={75} width={75} />
       </Box>
       <CardContent>
-        <Typography textAlign="center" level="title-md">
+        <Typography textAlign="center" noWrap title={name}>
           {isMe ? "You" : name}
         </Typography>
       </CardContent>

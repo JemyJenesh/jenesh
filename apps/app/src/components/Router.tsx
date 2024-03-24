@@ -1,4 +1,4 @@
-import { Home, NotFoundPage, PlayerCreate } from "@/pages";
+import { BingoRoom, Home, NotFoundPage, PlayerCreate } from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrivateRoute } from ".";
 
@@ -16,10 +16,10 @@ export function Router() {
         />
         <Route path="/players/create" element={<PlayerCreate />} />
         <Route
-          path="/secret"
+          path="/bingos/:id/room"
           element={
             <PrivateRoute>
-              <p>Secret</p>
+              <BingoRoom />
             </PrivateRoute>
           }
         />
