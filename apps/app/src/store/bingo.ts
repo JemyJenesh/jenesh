@@ -59,6 +59,7 @@ export function useBingo(id: string) {
 
 export const useBingoSubscription = (id: string) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   let socket = useRef<Socket>();
 
   useEffect(() => {
@@ -82,6 +83,10 @@ export const useBingoSubscription = (id: string) => {
         }
         return prev;
       });
+    });
+
+    socket.current.on("bingo-started", () => {
+      navigate(`/bingos/${id}`);
     });
 
     return () => {

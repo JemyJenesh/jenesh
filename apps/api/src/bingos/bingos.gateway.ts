@@ -38,4 +38,16 @@ export class BingosGetaway {
     const player = this.playersService.findOne(playerID);
     client.nsp.to(data.bingoID).emit('player-joined', player);
   }
+
+  @SubscribeMessage('start-bingo')
+  handleStart(client: Socket, data: { bingoID: string }) {
+    const { bingoID } = data;
+    const bingo = this.bingosService.findOne(bingoID);
+    const newBingo = {
+      ...bingo,
+      state: 'started' as const,
+    };
+    this.bingosService.update(newBingo);
+    client.nsp.to(data.bingoID).emit('bingo-started');
+  }
 }

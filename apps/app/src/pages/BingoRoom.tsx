@@ -11,9 +11,14 @@ export function BingoRoom() {
   const emit = useBingoSubscription(id!);
 
   const handleJoin = () => {
-    console.log("joiansdf");
     emit("join-bingo", {
       playerID: player?.id,
+      bingoID: id,
+    });
+  };
+
+  const handleStart = () => {
+    emit("start-bingo", {
       bingoID: id,
     });
   };
@@ -54,12 +59,7 @@ export function BingoRoom() {
       <Stack direction={"row"} gap={3}>
         <CopyButton text={window.location.href}>Copy Link</CopyButton>
         {showStart ? (
-          <Button
-            disabled={!canStart}
-            onClick={() => {
-              // server
-            }}
-          >
+          <Button disabled={!canStart} onClick={handleStart}>
             Start Game
           </Button>
         ) : (
