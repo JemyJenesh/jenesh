@@ -3,12 +3,17 @@ import QuizImage from "@/assets/quiz.jpg";
 import TypingImage from "@/assets/typing.jpg";
 import UnoImage from "@/assets/uno.jpg";
 import { GameCard } from "@/components";
-import { useAppStore, useCreateBingo } from "@/store";
+import { useBingoCreate, usePlayer } from "@/store";
 import { Box, Stack, Typography } from "@mui/joy";
 
 export function Home() {
-  const createBingoMutation = useCreateBingo();
-  const player = useAppStore((state) => state.player);
+  const { player } = usePlayer();
+  const { mutate, isLoading } = useBingoCreate();
+  const onCreateBingo = () => {
+    if (player) {
+      mutate(player.id);
+    }
+  };
 
   return (
     <Stack spacing={10}>
@@ -40,8 +45,8 @@ export function Home() {
           <GameCard
             title="Bingo"
             img={BingoImage}
-            handleClick={() => createBingoMutation.mutate(player!.id)}
-            isLoading={false}
+            handleClick={onCreateBingo}
+            isLoading={isLoading}
             isAvailable
           />
           <GameCard
