@@ -67,7 +67,8 @@ export class BingosController {
       });
     }
     const board = this.boardsService.findPlayersBoard(id, playerID);
-    return { bingo, board };
+    const players = this.playersService.findMany(bingo.playerIDs);
+    return { bingo, board, players };
   }
 
   @Patch(':id')

@@ -63,32 +63,34 @@ export class BingosGetaway {
 
     this.intervalIDs[bingoID] = setInterval(() => {
       let updatedBingo = this.bingosService.findOne(bingo.id);
-      if (history.length < 75 || updatedBingo.state !== 'over') {
+      if (history.length < 75) {
         const newNumber = this.boardsService._pickBingoNumber(history);
         history = [...history, newNumber];
         this.bingosService.update({ ...updatedBingo, history });
         client.nsp.to(data.bingoID).emit('new-bingo-number', newNumber);
       } else {
+        this.bingosService.update({ ...updatedBingo, state: 'over' });
         clearInterval(this.intervalIDs[bingoID]);
+        client.nsp.to(bingoID).emit('bingo-over');
       }
-    }, 1000);
+    }, 5000);
   }
 
   @SubscribeMessage('update-board')
   handleUpdateBoard(client: Socket, data: { board: Board }) {
     const { board } = data;
     this.boardsService.update(board);
+    const bingo = this.bingosService.findOne(board.bingoID);
     const isBingo = this.boardsService._checkForBingo(board);
-    if (isBingo) {
+    if (isBingo && !bingo.winnerID) {
       clearInterval(this.intervalIDs[board.bingoID]);
-      const bingo = this.bingosService.findOne(board.bingoID);
       this.bingosService.update({
         ...bingo,
         state: 'over',
         winnerID: board.playerID,
       });
       client.nsp.to(board.bingoID).emit('bingo', {
-        winner: board.playerID,
+        board,
       });
     }
   }

@@ -1,5 +1,5 @@
 import { CopyButton, PlayerCard } from "@/components";
-import { useBingo, useBingoSubscription, usePlayer } from "@/store";
+import { useBingo, useBingoRoomSubscription, usePlayer } from "@/store";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Stack, Typography } from "@mui/joy";
 import { Navigate, useParams } from "react-router-dom";
@@ -8,7 +8,7 @@ export function BingoRoom() {
   const { id } = useParams();
   const { data, isLoading, isError } = useBingo(id!);
   const { player } = usePlayer();
-  const emit = useBingoSubscription(id!);
+  const { emit } = useBingoRoomSubscription(id!);
 
   const handleJoin = () => {
     emit("join-bingo", {

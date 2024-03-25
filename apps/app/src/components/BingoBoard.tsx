@@ -44,9 +44,13 @@ function Cell({
       ) : (
         <Typography
           level="h4"
+          color={isMarkable ? "primary" : undefined}
           sx={{
             fontSize: "24px",
             fontWeight: isMarkable && !marked ? "bold" : "normal",
+            animation: isMarkable
+              ? "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite"
+              : undefined,
           }}
         >
           {value}
@@ -133,6 +137,7 @@ export function BingoBoard({
             display: "grid",
             gridTemplateColumns: `repeat(5, ${CELL_SIZE}px)`,
             gridTemplateRows: `repeat(5, ${CELL_SIZE}px)`,
+            gridAutoFlow: "column",
           }}
         >
           {spots.map(({ value, marked }, i) => (
@@ -141,7 +146,7 @@ export function BingoBoard({
               index={i}
               text={value}
               marked={marked}
-              isMarkable={history?.slice(0, -1).includes(value)}
+              isMarkable={history?.includes(value)}
               onClick={handleClick}
             />
           ))}
