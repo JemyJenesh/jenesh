@@ -72,18 +72,15 @@ export type GetBingoWithPlayersBoardResponse = {
   board: Board;
   players: Player[];
 };
-export function useBingoWithPlayersBoard(id: string) {
-  const { player } = usePlayer();
-  const getBingo = async (
-    id: string
-  ): Promise<GetBingoWithPlayersBoardResponse> => {
-    const res = await axios.get(`/api/bingos/${id}/board/${player?.id}`);
+export function useBingoWithPlayersBoard(id: string, playerID: string) {
+  const getBingo = async (): Promise<GetBingoWithPlayersBoardResponse> => {
+    const res = await axios.get(`/api/bingos/${id}/board/${playerID}`);
     return res.data;
   };
 
   const query = useQuery({
-    queryKey: ["bingos", "board", id],
-    queryFn: () => getBingo(id!),
+    queryKey: ["bingos", "board", id, playerID],
+    queryFn: () => getBingo(),
   });
 
   return query;
@@ -134,6 +131,7 @@ export const useBingoRoomSubscription = (id: string) => {
 
 export const useBingoSubscription = (id: string) => {
   const [progress, setProgress] = useState(10);
+  const { player } = usePlayer();
   const queryClient = useQueryClient();
   let socket = useRef<Socket>();
   const emit = (event: string, data: any) => {
@@ -163,19 +161,26 @@ export const useBingoSubscription = (id: string) => {
     });
 
     socket.current.on("bingo", ({ board: winnerBoard }: { board: Board }) => {
-      queryClient.setQueriesData(["bingos", "board", id], (prev: any) => {
-        if (prev) {
-          const { board, bingo, players } =
-            prev as GetBingoWithPlayersBoardResponse;
-          const data: GetBingoWithPlayersBoardResponse = {
-            board,
-            players,
-            bingo: { ...bingo, winnerID: winnerBoard.playerID, state: "over" },
-          };
-          return data;
+      queryClient.setQueriesData(
+        ["bingos", "board", id, player?.id!],
+        (prev: any) => {
+          if (prev) {
+            const { board, bingo, players } =
+              prev as GetBingoWithPlayersBoardResponse;
+            const data: GetBingoWithPlayersBoardResponse = {
+              board,
+              players,
+              bingo: {
+                ...bingo,
+                winnerID: winnerBoard.playerID,
+                state: "over",
+              },
+            };
+            return data;
+          }
+          return prev;
         }
-        return prev;
-      });
+      );
       clearInterval(intervalID);
     });
 
@@ -184,19 +189,22 @@ export const useBingoSubscription = (id: string) => {
     });
 
     socket.current.on("new-bingo-number", (number) => {
-      queryClient.setQueriesData(["bingos", "board", id], (prev: any) => {
-        if (prev) {
-          const { bingo, board, players } =
-            prev as GetBingoWithPlayersBoardResponse;
-          const data: GetBingoWithPlayersBoardResponse = {
-            board,
-            players,
-            bingo: { ...bingo, history: [...bingo.history, number] },
-          };
-          return data;
+      queryClient.setQueriesData(
+        ["bingos", "board", id, player?.id!],
+        (prev: any) => {
+          if (prev) {
+            const { bingo, board, players } =
+              prev as GetBingoWithPlayersBoardResponse;
+            const data: GetBingoWithPlayersBoardResponse = {
+              board,
+              players,
+              bingo: { ...bingo, history: [...bingo.history, number] },
+            };
+            return data;
+          }
+          return prev;
         }
-        return prev;
-      });
+      );
       setProgress(0);
       clearInterval(intervalID);
       intervalID = setInterval(() => {
