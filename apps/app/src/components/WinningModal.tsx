@@ -37,7 +37,7 @@ export function WinningModal({
     winnerID!
   );
   const isWinner = player?.id === winnerID;
-  const winner = players.find((p) => p.id === winnerID);
+  const winner = players.find((p) => p.id === winnerID)?.name;
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -59,7 +59,7 @@ export function WinningModal({
               my: 5,
             }}
           >
-            {winner?.name} won the game!
+            {isWinner ? "You win!" : `${winner} wins!`}
           </Typography>
           <Stack
             sx={{
@@ -78,7 +78,7 @@ export function WinningModal({
             {!isWinner && (
               <Box>
                 <Typography level="title-lg" textAlign={"center"}>
-                  Winner's Board
+                  {winner}'s Board
                 </Typography>
                 <BingoBoard board={data?.board!} history={[]} emit={() => {}} />
               </Box>
