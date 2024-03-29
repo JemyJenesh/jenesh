@@ -3,15 +3,21 @@ import QuizImage from "@/assets/quiz.jpg";
 import TypingImage from "@/assets/typing.jpg";
 import UnoImage from "@/assets/uno.jpg";
 import { GameCard } from "@/components";
-import { useBingoCreate, usePlayer } from "@/store";
+import { useBingoCreate, usePlayer, useUnoCreate } from "@/store";
 import { Box, Stack, Typography } from "@mui/joy";
 
 export function Home() {
   const { player } = usePlayer();
-  const { mutate, isLoading } = useBingoCreate();
-  const onCreateBingo = () => {
+  const bingoMutation = useBingoCreate();
+  const unoMutation = useUnoCreate();
+  const onBingoCreate = () => {
     if (player) {
-      mutate(player.id);
+      bingoMutation.mutate(player.id);
+    }
+  };
+  const onUnoCreate = () => {
+    if (player) {
+      unoMutation.mutate(player.id);
     }
   };
 
@@ -35,25 +41,26 @@ export function Home() {
             img={QuizImage}
             handleClick={() => {}}
             isLoading={false}
+            isAvailable={false}
           />
           <GameCard
             title="Key Racer"
             img={TypingImage}
             handleClick={() => {}}
             isLoading={false}
+            isAvailable={false}
           />
           <GameCard
             title="Bingo"
             img={BingoImage}
-            handleClick={onCreateBingo}
-            isLoading={isLoading}
-            isAvailable
+            handleClick={onBingoCreate}
+            isLoading={bingoMutation.isLoading}
           />
           <GameCard
             title="Uno"
             img={UnoImage}
-            handleClick={() => {}}
-            isLoading={false}
+            handleClick={onUnoCreate}
+            isLoading={unoMutation.isLoading}
           />
         </Stack>
       </Stack>

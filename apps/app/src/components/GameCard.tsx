@@ -10,7 +10,7 @@ export function GameCard({
   isLoading = false,
   handleClick,
   img,
-  isAvailable = false,
+  isAvailable = true,
 }: {
   title: string;
   isLoading: boolean;
