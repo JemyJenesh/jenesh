@@ -27,12 +27,12 @@ export class UnosGetaway {
     private readonly cardsService: CardsService,
   ) {}
 
-  @SubscribeMessage('subscribe-unos')
+  @SubscribeMessage('subscribe-uno')
   handleSubscription(client: Socket, data: { unoID: string }) {
     client.join(data.unoID);
   }
 
-  @SubscribeMessage('join-unos')
+  @SubscribeMessage('join-uno')
   handleJoin(client: Socket, data: { playerID: string; unoID: string }) {
     const { unoID, playerID } = data;
     const uno = this.unosService.findOne(unoID);

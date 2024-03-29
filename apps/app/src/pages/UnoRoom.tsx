@@ -1,5 +1,5 @@
 import { CopyButton, PlayerCard } from "@/components";
-import { usePlayer, useUno } from "@/store";
+import { usePlayer, useUno, useUnoSubscription } from "@/store";
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Stack, Typography } from "@mui/joy";
 import { Navigate, useParams } from "react-router-dom";
@@ -8,18 +8,19 @@ export function UnoRoom() {
   const { id } = useParams();
   const { data, isLoading, isError } = useUno(id!);
   const { player } = usePlayer();
+  const { emit } = useUnoSubscription(id!);
 
   const handleJoin = () => {
-    // emit("join-bingo", {
-    //   playerID: player?.id,
-    //   bingoID: id,
-    // });
+    emit("join-uno", {
+      playerID: player?.id,
+      unoID: id,
+    });
   };
 
   const handleStart = () => {
-    // emit("start-bingo", {
-    //   bingoID: id,
-    // });
+    emit("start-uno", {
+      unoID: id,
+    });
   };
 
   if (isLoading) return <p>Loading...</p>;
