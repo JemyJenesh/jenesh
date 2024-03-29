@@ -1,6 +1,7 @@
 import axios from "@/services/Axios";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { Player } from ".";
 
 export type Card = {
   id: string;
@@ -59,29 +60,29 @@ export function useUnoCreate() {
   return mutation;
 }
 
-// export type GetBingoResponse = {
-//   bingo: Bingo;
-//   players: Player[];
-// };
-// export function useBingo(id: string) {
-//   const getBingo = async (id: string): Promise<GetBingoResponse> => {
-//     const res = await axios.get(`/api/bingos/${id}`);
-//     return res.data;
-//   };
+export type GetUnoResponse = {
+  uno: Uno;
+  players: Player[];
+};
+export function useUno(id: string) {
+  const getUno = async (id: string): Promise<GetUnoResponse> => {
+    const res = await axios.get(`/api/unos/${id}`);
+    return res.data;
+  };
 
-//   const navigate = useNavigate();
-//   const query = useQuery({
-//     queryKey: ["bingos", id],
-//     queryFn: () => getBingo(id!),
-//     onSuccess: (data) => {
-//       if (!data) {
-//         navigate("/");
-//       }
-//     },
-//   });
+  const navigate = useNavigate();
+  const query = useQuery({
+    queryKey: ["unos", id],
+    queryFn: () => getUno(id!),
+    onSuccess: (data) => {
+      if (!data) {
+        navigate("/");
+      }
+    },
+  });
 
-//   return query;
-// }
+  return query;
+}
 
 // export type GetBingoWithPlayersBoardResponse = {
 //   bingo: Bingo;
