@@ -258,3 +258,46 @@ export const useUnoSubscription = (id: string) => {
 
   return { emit };
 };
+
+export const useUnoRoomSubscription = (id: string) => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  let socket = useRef<Socket>();
+  const emit = (event: string, data: any) => {
+    socket.current?.emit(event, data);
+  };
+
+  useEffect(() => {
+    socket.current = io(
+      process.env.NODE_ENV === "production" ? "" : "http://localhost:3000"
+    );
+
+    socket.current.on("connect", () => {
+      socket.current?.emit("subscribe-uno", { unoID: id });
+    });
+
+    socket.current.on("player-joined", (player: Player) => {
+      queryClient.setQueriesData(["unos", id], (prev: any) => {
+        if (prev) {
+          const { uno, players } = prev as GetUnoResponse;
+          const data: GetUnoResponse = {
+            uno: { ...uno, playerIDs: [...uno.playerIDs, player.id] },
+            players: [...players, player],
+          };
+          return data;
+        }
+        return prev;
+      });
+    });
+
+    socket.current.on("uno-started", () => {
+      navigate(`/unos/${id}`);
+    });
+
+    return () => {
+      socket.current?.close();
+    };
+  }, [queryClient]);
+
+  return { emit };
+};

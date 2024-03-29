@@ -41,33 +41,28 @@ export class UnosGetaway {
     client.nsp.to(data.unoID).emit('player-joined', player);
   }
 
-  // @SubscribeMessage('start-bingo')
-  // handleStart(client: Socket, data: { bingoID: string }) {
-  //   const { bingoID } = data;
-  //   const bingo = this.bingosService.findOne(bingoID);
-  //   const newBingo = {
-  //     ...bingo,
-  //     state: 'started' as const,
-  //   };
-  //   this.bingosService.update(newBingo);
-  //   client.nsp.to(data.bingoID).emit('bingo-started');
+  @SubscribeMessage('start-uno')
+  handleStart(client: Socket, data: { unoID: string }) {
+    const { unoID } = data;
+    this.unosService.start(unoID);
+    client.nsp.to(unoID).emit('uno-started');
 
-  //   let history = bingo.history;
+    // let history = bingo.history;
 
-  //   this.intervalIDs[bingoID] = setInterval(() => {
-  //     let updatedBingo = this.bingosService.findOne(bingo.id);
-  //     if (history.length < 75) {
-  //       const newNumber = this.boardsService._pickBingoNumber(history);
-  //       history = [...history, newNumber];
-  //       this.bingosService.update({ ...updatedBingo, history });
-  //       client.nsp.to(data.bingoID).emit('new-bingo-number', newNumber);
-  //     } else {
-  //       this.bingosService.update({ ...updatedBingo, state: 'over' });
-  //       clearInterval(this.intervalIDs[bingoID]);
-  //       client.nsp.to(bingoID).emit('bingo-over');
-  //     }
-  //   }, 5000);
-  // }
+    // this.intervalIDs[bingoID] = setInterval(() => {
+    //   let updatedBingo = this.bingosService.findOne(bingo.id);
+    //   if (history.length < 75) {
+    //     const newNumber = this.boardsService._pickBingoNumber(history);
+    //     history = [...history, newNumber];
+    //     this.bingosService.update({ ...updatedBingo, history });
+    //     client.nsp.to(data.bingoID).emit('new-bingo-number', newNumber);
+    //   } else {
+    //     this.bingosService.update({ ...updatedBingo, state: 'over' });
+    //     clearInterval(this.intervalIDs[bingoID]);
+    //     client.nsp.to(bingoID).emit('bingo-over');
+    //   }
+    // }, 5000);
+  }
 
   // @SubscribeMessage('update-board')
   // handleUpdateBoard(client: Socket, data: { board: Board }) {
