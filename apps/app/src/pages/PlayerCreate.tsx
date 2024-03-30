@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   FormLabel,
+  Grid,
   Input,
   Radio,
   RadioGroup,
@@ -50,122 +51,119 @@ export function PlayerCreate() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 3,
-      }}
-    >
-      <Stack
+    <Grid container justifyContent={"center"}>
+      <Grid xs={0} lg={4} />
+      <Grid
+        xs={12}
+        lg={4}
         sx={{
-          width: "100%",
-          py: 3,
-          boxShadow: "xs",
           backgroundColor: "whitesmoke",
         }}
-        direction="column"
-        alignItems="center"
-        spacing={3}
       >
-        <Typography sx={{ width: 435 }} fontSize={"1.5rem"}>
-          Create a profile
-        </Typography>
-        <Stack spacing={1} sx={{ width: 435 }}>
-          <FormLabel>Enter your name</FormLabel>
-          <Input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            autoFocus
-            variant="outlined"
-          />
-        </Stack>
-      </Stack>
-
-      <Stack spacing={1}>
-        <FormLabel>Select an avatar</FormLabel>
-        <Sheet
-          variant="outlined"
+        <Box
           sx={{
-            borderRadius: "sm",
-            p: 1,
+            width: "100%",
+            p: 3,
           }}
         >
-          <RadioGroup
-            overlay
-            name="avatar"
-            onChange={handleChange}
+          <Typography fontSize={"1.5rem"}>Create a profile</Typography>
+          <Stack spacing={1}>
+            <FormLabel>Enter your name</FormLabel>
+            <Input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              autoFocus
+              variant="outlined"
+            />
+          </Stack>
+        </Box>
+      </Grid>
+      <Grid xs={0} lg={4} />
+      <Grid xs={0} lg={2} />
+      <Grid xs={12} lg={8}>
+        <Stack spacing={1} sx={{ p: 3 }}>
+          <FormLabel>Select an avatar</FormLabel>
+          <Sheet
+            variant="outlined"
             sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(10, 1fr)",
-              flexDirection: "row",
-              gap: 2,
-              [`& .${radioClasses.checked}`]: {
-                [`& .${radioClasses.action}`]: {
-                  inset: -1,
-                  border: "3px solid",
-                  borderColor: "primary.500",
-                },
-              },
-              [`& .${radioClasses.radio}`]: {
-                display: "contents",
-                "& > svg": {
-                  zIndex: 2,
-                  position: "absolute",
-                  top: "-8px",
-                  right: "-8px",
-                  bgcolor: "background.surface",
-                  borderRadius: "50%",
-                },
-              },
+              borderRadius: "sm",
+              p: 1,
+              overflow: "auto",
             }}
           >
-            {avatars.map((value) => (
-              <Sheet
-                key={value}
-                variant="soft"
-                sx={{
-                  borderRadius: "100%",
-                  boxShadow: "sm",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Radio
-                  id={value}
-                  value={value}
-                  checkedIcon={<CheckCircleRoundedIcon />}
-                />
-                <Avatar
+            <RadioGroup
+              overlay
+              name="avatar"
+              onChange={handleChange}
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(10, 1fr)",
+                flexDirection: "row",
+                gap: 2,
+                [`& .${radioClasses.checked}`]: {
+                  [`& .${radioClasses.action}`]: {
+                    inset: -1,
+                    border: "3px solid",
+                    borderColor: "primary.500",
+                  },
+                },
+                [`& .${radioClasses.radio}`]: {
+                  display: "contents",
+                  "& > svg": {
+                    zIndex: 2,
+                    position: "absolute",
+                    top: "-8px",
+                    right: "-8px",
+                    bgcolor: "background.surface",
+                    borderRadius: "50%",
+                  },
+                },
+              }}
+            >
+              {avatars.map((value) => (
+                <Sheet
+                  key={value}
+                  variant="soft"
                   sx={{
-                    "--Avatar-size": "75px",
+                    borderRadius: "100%",
+                    boxShadow: "sm",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
-                  src={value}
-                  size="lg"
-                />
-              </Sheet>
-            ))}
-          </RadioGroup>
-        </Sheet>
-      </Stack>
+                >
+                  <Radio
+                    id={value}
+                    value={value}
+                    checkedIcon={<CheckCircleRoundedIcon />}
+                  />
+                  <Avatar
+                    sx={{
+                      "--Avatar-size": "75px",
+                    }}
+                    src={value}
+                    size="lg"
+                  />
+                </Sheet>
+              ))}
+            </RadioGroup>
+          </Sheet>
+        </Stack>
+      </Grid>
+      <Grid xs={0} lg={2} />
 
-      <Stack
-        sx={{ width: 435 }}
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="flex-start"
-      >
-        <Button
-          onClick={handleSubmit}
-          loading={isLoading}
-          disabled={isDisabled}
-        >
-          Create
-        </Button>
-      </Stack>
-    </Box>
+      <Grid xs={12} lg={4}>
+        <Box sx={{ display: "flex", px: 3, justifyContent: "flex-end" }}>
+          <Button
+            onClick={handleSubmit}
+            loading={isLoading}
+            disabled={isDisabled}
+          >
+            Create
+          </Button>
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
