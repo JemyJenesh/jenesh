@@ -20,7 +20,7 @@ export function OpponentHand({ player }: { player: PlayerWithHand }) {
         }}
       >
         <Typography level="h4" textColor={"common.white"}>
-          {hand.length}
+          {hand.cards.length}
         </Typography>
       </Box>
     </Stack>

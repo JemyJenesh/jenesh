@@ -1,5 +1,5 @@
 import { OpponentHand, PlayerHand, UnoCard } from "@/components";
-import { usePlayer, useUnoWithHands } from "@/store";
+import { usePlayer, useUnoSubscription, useUnoWithHands } from "@/store";
 import { Box, Button, Stack } from "@mui/joy";
 import { useParams } from "react-router-dom";
 
@@ -7,6 +7,7 @@ export function Uno() {
   const { id } = useParams();
   const { player } = usePlayer();
   const { data, isError, isLoading } = useUnoWithHands(id!);
+  const { emit } = useUnoSubscription(id!);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Something went wrong</p>;
@@ -20,6 +21,19 @@ export function Uno() {
   const playerHand = players[playerIndex];
   const isMyTurn = uno.turn === playerIndex;
   const discardCard = uno.discardPile[uno.discardPile.length - 1];
+  const canDraw = !playerHand.hand.cards.some(
+    (card) =>
+      card.color === discardCard.color ||
+      card.value === discardCard.value ||
+      card.type === "wild"
+  );
+
+  const handleDraw = () => {
+    emit("draw", {
+      handID: playerHand.hand.id,
+      unoID: id,
+    });
+  };
 
   const renderDrawPile = () => {
     return (
@@ -31,7 +45,14 @@ export function Uno() {
           draggable={false}
           src={`/static/uno/deck.png`}
         />
-        <Button variant="soft">Draw</Button>
+
+        <Button
+          sx={{ visibility: canDraw ? "visible" : "hidden" }}
+          variant="soft"
+          onClick={handleDraw}
+        >
+          Draw
+        </Button>
       </Stack>
     );
   };

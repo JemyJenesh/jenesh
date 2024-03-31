@@ -19,7 +19,7 @@ export function PlayerHand({
         justifyContent: "center",
       }}
     >
-      {hand?.map((card) => (
+      {hand.cards?.map((card) => (
         <Box
           key={card.id}
           sx={{

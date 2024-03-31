@@ -6,6 +6,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { PlayersService } from 'src/players/players.service';
 import { CardsService } from './cards.service';
+import { Uno } from './entities/uno.entity';
 import { HandsService } from './hands.service';
 import { UnosService } from './unos.service';
 
@@ -46,40 +47,18 @@ export class UnosGetaway {
     const { unoID } = data;
     this.unosService.start(unoID);
     client.nsp.to(unoID).emit('uno-started');
-
-    // let history = bingo.history;
-
-    // this.intervalIDs[bingoID] = setInterval(() => {
-    //   let updatedBingo = this.bingosService.findOne(bingo.id);
-    //   if (history.length < 75) {
-    //     const newNumber = this.boardsService._pickBingoNumber(history);
-    //     history = [...history, newNumber];
-    //     this.bingosService.update({ ...updatedBingo, history });
-    //     client.nsp.to(data.bingoID).emit('new-bingo-number', newNumber);
-    //   } else {
-    //     this.bingosService.update({ ...updatedBingo, state: 'over' });
-    //     clearInterval(this.intervalIDs[bingoID]);
-    //     client.nsp.to(bingoID).emit('bingo-over');
-    //   }
-    // }, 5000);
   }
 
-  // @SubscribeMessage('update-board')
-  // handleUpdateBoard(client: Socket, data: { board: Board }) {
-  //   const { board } = data;
-  //   this.boardsService.update(board);
-  //   const bingo = this.bingosService.findOne(board.bingoID);
-  //   const isBingo = this.boardsService._checkForBingo(board);
-  //   if (isBingo && !bingo.winnerID) {
-  //     clearInterval(this.intervalIDs[board.bingoID]);
-  //     this.bingosService.update({
-  //       ...bingo,
-  //       state: 'over',
-  //       winnerID: board.playerID,
-  //     });
-  //     client.nsp.to(board.bingoID).emit('bingo', {
-  //       board,
-  //     });
-  //   }
-  // }
+  @SubscribeMessage('draw')
+  handleDraw(client: Socket, data: { handID: string; unoID: string }) {
+    const { handID, unoID } = data;
+    const { hand, uno } = this.unosService.drawCards(unoID, handID, 1);
+    const nextTurn = this.unosService.nextTurn(uno);
+    const updatedUno: Uno = {
+      ...uno,
+      turn: nextTurn,
+    };
+    this.unosService.update(updatedUno);
+    client.nsp.to(unoID).emit('card-drawn', { uno: updatedUno, hand });
+  }
 }

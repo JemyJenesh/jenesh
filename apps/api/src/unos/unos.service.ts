@@ -31,6 +31,10 @@ export class UnosService {
     return this.unos.get(id);
   }
 
+  update(uno: Uno) {
+    return this.unos.update(uno);
+  }
+
   addPlayer(id: string, playerID: string) {
     const uno = this.findOne(id);
     const updatedUno: Uno = {
@@ -55,5 +59,24 @@ export class UnosService {
       drawPile: deck,
       discardPile: [discardPile],
     });
+  }
+
+  drawCards(id: string, handID: string, count: number = 1) {
+    const uno = this.findOne(id);
+    const deck = uno.drawPile.slice(0, -count);
+    const cards = uno.drawPile.slice(-count).reverse();
+    const hand = this.handsService.addCards(handID, cards);
+    const updatedUno: Uno = {
+      ...uno,
+      drawPile: deck,
+    };
+
+    return { hand, uno: updatedUno };
+  }
+
+  nextTurn(uno: Uno) {
+    const { turn, direction, playerIDs } = uno;
+    const playersLength = playerIDs.length;
+    return (turn + direction + playersLength) % playersLength;
   }
 }

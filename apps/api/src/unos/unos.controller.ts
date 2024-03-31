@@ -48,7 +48,7 @@ export class UnosController {
     const hands = this.handsService.findByUnoID(uno.id, uno.playerIDs);
     const playersWithHands = players.map((player) => ({
       ...player,
-      hand: hands.find((hand) => hand.playerID === player.id).cards,
+      hand: hands.find((hand) => hand.playerID === player.id),
     }));
     return { uno, players: playersWithHands };
   }

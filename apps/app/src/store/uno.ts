@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
-import { Player } from ".";
+import { Player, usePlayer } from ".";
 
 export type Card = {
   id: string;
@@ -87,7 +87,7 @@ export function useUno(id: string) {
 }
 
 export type PlayerWithHand = Player & {
-  hand: Card[];
+  hand: Hand;
 };
 export type GetUnoWithHandsResponse = {
   uno: Uno;
@@ -107,70 +107,14 @@ export function useUnoWithHands(id: string) {
   return query;
 }
 
-// export const useBingoRoomSubscription = (id: string) => {
-//   const queryClient = useQueryClient();
-//   const navigate = useNavigate();
-//   let socket = useRef<Socket>();
-//   const emit = (event: string, data: any) => {
-//     socket.current?.emit(event, data);
-//   };
-
-//   useEffect(() => {
-//     socket.current = io(
-//       process.env.NODE_ENV === "production" ? "" : "http://localhost:3000"
-//     );
-
-//     socket.current.on("connect", () => {
-//       socket.current?.emit("subscribe-bingo", { bingoID: id });
-//     });
-
-//     socket.current.on("player-joined", (player: Player) => {
-//       queryClient.setQueriesData(["bingos", id], (prev: any) => {
-//         if (prev) {
-//           const { bingo, players } = prev as GetBingoResponse;
-//           const data: GetBingoResponse = {
-//             bingo: { ...bingo, playerIDs: [...bingo.playerIDs, player.id] },
-//             players: [...players, player],
-//           };
-//           return data;
-//         }
-//         return prev;
-//       });
-//     });
-
-//     socket.current.on("bingo-started", () => {
-//       navigate(`/bingos/${id}`);
-//     });
-
-//     return () => {
-//       socket.current?.close();
-//     };
-//   }, [queryClient]);
-
-//   return { emit };
-// };
-
 export const useUnoSubscription = (id: string) => {
-  // const [progress, setProgress] = useState(10);
-  // const { player } = usePlayer();
+  const { player } = usePlayer();
   const queryClient = useQueryClient();
   let socket = useRef<Socket>();
   const emit = (event: string, data: any) => {
     socket.current?.emit(event, data);
   };
   let intervalID: NodeJS.Timeout;
-
-  // useEffect(() => {
-  //   intervalID = setInterval(() => {
-  //     setProgress((prev) => {
-  //       if (prev === 100) {
-  //         clearInterval(intervalID);
-  //         return 0;
-  //       }
-  //       return prev + 2;
-  //     });
-  //   }, 100);
-  // }, []);
 
   useEffect(() => {
     socket.current = io(
@@ -181,19 +125,24 @@ export const useUnoSubscription = (id: string) => {
       socket.current?.emit("subscribe-uno", { unoID: id });
     });
 
-    socket.current.on("player-joined", (player: Player) => {
-      queryClient.setQueriesData(["unos", id], (prev: any) => {
-        if (prev) {
-          const { uno, players } = prev as GetUnoResponse;
-          const data: GetUnoResponse = {
-            uno: { ...uno, playerIDs: [...uno.playerIDs, player.id] },
-            players: [...players, player],
-          };
-          return data;
-        }
-        return prev;
-      });
-    });
+    socket.current.on(
+      "card-drawn",
+      ({ uno, hand }: { uno: Uno; hand: Hand }) => {
+        queryClient.setQueriesData(["unos", "hands", id], (prev: any) => {
+          if (prev) {
+            const { players } = prev as GetUnoWithHandsResponse;
+            const data: GetUnoResponse = {
+              uno,
+              players: players.map((p) =>
+                p.id === hand.playerID ? { ...p, hand } : p
+              ),
+            };
+            return data;
+          }
+          return prev;
+        });
+      }
+    );
 
     // socket.current.on("bingo", ({ board: winnerBoard }: { board: Board }) => {
     //   queryClient.setQueriesData(
