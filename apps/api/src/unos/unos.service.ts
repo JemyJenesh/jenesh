@@ -2,6 +2,7 @@ import { InMemoryDBService } from '@nestjs-addons/in-memory-db';
 import { Injectable } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { CreateUnoDto } from './dto/create-uno.dto';
+import { Card } from './entities/card.entity';
 import { Uno } from './entities/uno.entity';
 import { HandsService } from './hands.service';
 
@@ -17,7 +18,7 @@ export class UnosService {
     const { hostID } = createUnoDto;
 
     return this.unos.create({
-      drawPile: this.cardsService.buildDeck(),
+      drawPile: this.cardsService.shuffleDeck(this.cardsService.buildDeck()),
       discardPile: [],
       turn: 0,
       direction: 1,
@@ -41,14 +42,18 @@ export class UnosService {
 
   start(id: string) {
     const uno = this.findOne(id);
+    let deck = uno.drawPile;
+    let drawnCard: Card[];
     for (const playerID of uno.playerIDs) {
-      const { deck, drawnCard } = this.cardsService.draw(uno.drawPile, 7);
+      ({ deck, drawnCard } = this.cardsService.draw(deck, 7));
       this.handsService.create(playerID, id, drawnCard);
-      this.unos.update({
-        ...uno,
-        state: 'started',
-        drawPile: deck,
-      });
     }
+    const discardPile = deck.pop();
+    this.unos.update({
+      ...uno,
+      state: 'started',
+      drawPile: deck,
+      discardPile: [discardPile],
+    });
   }
 }

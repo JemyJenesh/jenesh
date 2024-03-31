@@ -15,6 +15,12 @@ export class HandsService {
     });
   }
 
+  findByUnoID(unoID: string, playerIDs: string[]) {
+    return this.hands.query(
+      (hand) => hand.unoID === unoID && playerIDs.includes(hand.playerID),
+    );
+  }
+
   addCards(id: string, cards: Card[]) {
     const hand = this.hands.get(id);
     const updatedHand = {
