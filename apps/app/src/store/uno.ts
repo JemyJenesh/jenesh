@@ -86,24 +86,26 @@ export function useUno(id: string) {
   return query;
 }
 
-// export type GetBingoWithPlayersBoardResponse = {
-//   bingo: Bingo;
-//   board: Board;
-//   players: Player[];
-// };
-// export function useBingoWithPlayersBoard(id: string, playerID: string) {
-//   const getBingo = async (): Promise<GetBingoWithPlayersBoardResponse> => {
-//     const res = await axios.get(`/api/bingos/${id}/board/${playerID}`);
-//     return res.data;
-//   };
+export type PlayerWithHand = Player & {
+  hand: Card[];
+};
+export type GetUnoWithHandsResponse = {
+  uno: Uno;
+  players: PlayerWithHand[];
+};
+export function useUnoWithHands(id: string) {
+  const getUno = async (): Promise<GetUnoWithHandsResponse> => {
+    const res = await axios.get(`/api/unos/${id}/hands`);
+    return res.data;
+  };
 
-//   const query = useQuery({
-//     queryKey: ["bingos", "board", id, playerID],
-//     queryFn: () => getBingo(),
-//   });
+  const query = useQuery({
+    queryKey: ["unos", "hands", id],
+    queryFn: () => getUno(),
+  });
 
-//   return query;
-// }
+  return query;
+}
 
 // export const useBingoRoomSubscription = (id: string) => {
 //   const queryClient = useQueryClient();

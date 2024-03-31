@@ -4,6 +4,7 @@ import {
   Home,
   NotFoundPage,
   PlayerCreate,
+  Uno,
   UnoRoom,
 } from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -43,6 +44,14 @@ export function Router() {
           element={
             <PrivateRoute>
               <UnoRoom />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/unos/:id"
+          element={
+            <PrivateRoute>
+              <Uno />
             </PrivateRoute>
           }
         />
