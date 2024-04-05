@@ -5,7 +5,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PlayersService } from 'src/players/players.service';
-import { CardsService } from './cards.service';
+import { CardsService, UnoColor } from './cards.service';
 import { Uno } from './entities/uno.entity';
 import { HandsService } from './hands.service';
 import { UnosService } from './unos.service';
@@ -60,5 +60,34 @@ export class UnosGetaway {
     };
     this.unosService.update(updatedUno);
     client.nsp.to(unoID).emit('card-drawn', { uno: updatedUno, hand });
+  }
+
+  @SubscribeMessage('discard')
+  handleDiscard(
+    client: Socket,
+    data: {
+      handID: string;
+      unoID: string;
+      cardID: string;
+      chosenColor?: UnoColor;
+    },
+  ) {
+    const { handID, unoID, cardID, chosenColor } = data;
+    let { hand, removedCard } = this.handsService.removeCard(handID, cardID);
+    const uno = this.unosService.findOne(unoID);
+    const nextTurn = this.unosService.nextTurn(uno);
+    if (removedCard.type === 'wild' && chosenColor) {
+      removedCard = this.cardsService.changeWildCardColor(
+        removedCard,
+        chosenColor,
+      );
+    }
+    const updatedUno: Uno = {
+      ...uno,
+      discardPile: [...uno.discardPile, removedCard],
+      turn: nextTurn,
+    };
+    this.unosService.update(updatedUno);
+    client.nsp.to(unoID).emit('card-thrown', { uno: updatedUno, hand });
   }
 }

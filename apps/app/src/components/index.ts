@@ -1,5 +1,6 @@
 export * from "./BingoBalls";
 export * from "./BingoBoard";
+export * from "./ColorModal";
 export * from "./CopyButton";
 export * from "./GameCard";
 export * from "./OpponentHand";

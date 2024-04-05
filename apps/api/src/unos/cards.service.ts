@@ -34,7 +34,17 @@ export class CardsService {
       color,
       value,
       type,
+      selectedColor: color,
     });
+  }
+
+  changeWildCardColor(card: Card, color: UnoColor) {
+    const updatedCard = {
+      ...card,
+      selectedColor: color,
+    };
+    this.cards.update(updatedCard);
+    return updatedCard;
   }
 
   buildDeck() {

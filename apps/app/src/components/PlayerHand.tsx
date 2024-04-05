@@ -1,13 +1,17 @@
-import { PlayerWithHand } from "@/store";
+import { Card, PlayerWithHand } from "@/store";
 import { Box } from "@mui/joy";
 import { UnoCard } from ".";
 
 export function PlayerHand({
   player,
   active,
+  canThrow,
+  discard,
 }: {
   player: PlayerWithHand;
   active: boolean;
+  canThrow: boolean;
+  discard: (card: Card) => void;
 }) {
   const { hand } = player;
   const cardSpread = active ? 30 : 50;
@@ -25,10 +29,10 @@ export function PlayerHand({
           sx={{
             display: "inline-block",
             transition: "transform 0.2s",
+            cursor: canThrow ? "pointer" : "not-allowed",
             filter: `brightness(${active ? 100 : 70}%)`,
             ...(active && {
               "&:hover": {
-                cursor: "pointer",
                 transform: "translateY(-20px) scale(1.1)",
               },
               "&:hover ~ div": {
@@ -40,7 +44,7 @@ export function PlayerHand({
             },
           }}
         >
-          <UnoCard card={card} />
+          <UnoCard card={card} onClick={() => discard(card)} />
         </Box>
       ))}
     </Box>

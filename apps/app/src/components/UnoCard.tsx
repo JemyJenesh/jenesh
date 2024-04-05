@@ -1,6 +1,12 @@
 import { Card } from "@/store";
 
-export function UnoCard({ card }: { card: Card }) {
+export function UnoCard({
+  card,
+  onClick,
+}: {
+  card: Card;
+  onClick?: () => void;
+}) {
   const { color, value } = card;
 
   return (
@@ -10,6 +16,7 @@ export function UnoCard({ card }: { card: Card }) {
       }}
       draggable={false}
       src={`/static/uno/${color}_${value}.png`}
+      onClick={onClick}
     />
   );
 }

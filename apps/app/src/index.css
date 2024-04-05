@@ -19,3 +19,10 @@ body,
     opacity: 0.5;
   }
 }
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(1.5);
+  }
+}

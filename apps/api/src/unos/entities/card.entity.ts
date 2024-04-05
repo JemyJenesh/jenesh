@@ -20,4 +20,5 @@ export class Card implements InMemoryDBEntity {
     | 'reverse'
     | 'wild'
     | 'draw-four';
+  selectedColor?: 'red' | 'yellow' | 'blue' | 'green' | 'wild';
 }

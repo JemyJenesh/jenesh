@@ -37,11 +37,12 @@ export class HandsService {
 
   removeCard(id: string, cardID: string) {
     const hand = this.hands.get(id);
+    const removedCard = hand.cards.find((card) => card.id === cardID);
     const updatedHand = {
       ...hand,
       cards: hand.cards.filter((card) => card.id !== cardID),
     };
     this.hands.update(updatedHand);
-    return updatedHand;
+    return { hand: updatedHand, removedCard };
   }
 }

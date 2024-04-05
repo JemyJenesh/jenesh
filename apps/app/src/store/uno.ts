@@ -25,6 +25,7 @@ export type Card = {
     | "reverse"
     | "wild"
     | "draw-four";
+  selectedColor?: "red" | "yellow" | "blue" | "green" | "wild";
 };
 export type Uno = {
   id: string;
@@ -144,62 +145,24 @@ export const useUnoSubscription = (id: string) => {
       }
     );
 
-    // socket.current.on("bingo", ({ board: winnerBoard }: { board: Board }) => {
-    //   queryClient.setQueriesData(
-    //     ["bingos", "board", id, player?.id!],
-    //     (prev: any) => {
-    //       if (prev) {
-    //         const { board, bingo, players } =
-    //           prev as GetBingoWithPlayersBoardResponse;
-    //         const data: GetBingoWithPlayersBoardResponse = {
-    //           board,
-    //           players,
-    //           bingo: {
-    //             ...bingo,
-    //             winnerID: winnerBoard.playerID,
-    //             state: "over",
-    //           },
-    //         };
-    //         return data;
-    //       }
-    //       return prev;
-    //     }
-    //   );
-    //   clearInterval(intervalID);
-    // });
-
-    // socket.current.on("bingo-over", () => {
-    //   clearInterval(intervalID);
-    // });
-
-    // socket.current.on("new-bingo-number", (number) => {
-    //   queryClient.setQueriesData(
-    //     ["bingos", "board", id, player?.id!],
-    //     (prev: any) => {
-    //       if (prev) {
-    //         const { bingo, board, players } =
-    //           prev as GetBingoWithPlayersBoardResponse;
-    //         const data: GetBingoWithPlayersBoardResponse = {
-    //           board,
-    //           players,
-    //           bingo: { ...bingo, history: [...bingo.history, number] },
-    //         };
-    //         return data;
-    //       }
-    //       return prev;
-    //     }
-    //   );
-    //   setProgress(0);
-    //   clearInterval(intervalID);
-    //   intervalID = setInterval(() => {
-    //     setProgress((prev) => {
-    //       if (prev === 100) {
-    //         return 0;
-    //       }
-    //       return prev + 2;
-    //     });
-    //   }, 100);
-    // });
+    socket.current.on(
+      "card-thrown",
+      ({ uno, hand }: { uno: Uno; hand: Hand }) => {
+        queryClient.setQueriesData(["unos", "hands", id], (prev: any) => {
+          if (prev) {
+            const { players } = prev as GetUnoWithHandsResponse;
+            const data: GetUnoResponse = {
+              uno,
+              players: players.map((p) =>
+                p.id === hand.playerID ? { ...p, hand } : p
+              ),
+            };
+            return data;
+          }
+          return prev;
+        });
+      }
+    );
 
     return () => {
       clearInterval(intervalID);
