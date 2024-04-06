@@ -133,6 +133,22 @@ export const useUnoSubscription = (id: string) => {
     });
   };
 
+  const updateHand = ({ hand }: { hand: Hand }) => {
+    queryClient.setQueriesData(["unos", "hands", id], (prev: any) => {
+      if (prev) {
+        const { players, uno } = prev as GetUnoWithHandsResponse;
+        const data: GetUnoResponse = {
+          uno,
+          players: players.map((p) =>
+            p.id === hand.playerID ? { ...p, hand } : p
+          ),
+        };
+        return data;
+      }
+      return prev;
+    });
+  };
+
   useEffect(() => {
     socket.current = io(
       process.env.NODE_ENV === "production" ? "" : "http://localhost:3000"
@@ -146,7 +162,7 @@ export const useUnoSubscription = (id: string) => {
 
     socket.current.on("card-thrown", updateUno);
 
-    socket.current.on("hand-updated", updateUno);
+    socket.current.on("hand-updated", updateHand);
 
     return () => {
       clearInterval(intervalID);

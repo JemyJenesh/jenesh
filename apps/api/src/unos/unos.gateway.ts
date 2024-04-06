@@ -92,9 +92,10 @@ export class UnosGetaway {
     ])[0];
     skippedHand = this.handsService.updateHandEffect(skippedHand.id, 'Skipped');
 
-    socket.nsp
-      .to(updatedUno.id)
-      .emit('hand-updated', { uno: updatedUno, hand: skippedHand });
+    nextTurn = this.unosService.nextTurn(updatedUno, updatedUno.direction);
+    updatedUno.turn = nextTurn;
+
+    socket.nsp.to(updatedUno.id).emit('hand-updated', { hand: skippedHand });
 
     let timeoutID = setTimeout(() => {
       const resetEffectHand = this.handsService.updateHandEffect(
@@ -102,13 +103,10 @@ export class UnosGetaway {
       );
       socket.nsp
         .to(updatedUno.id)
-        .emit('hand-updated', { uno: updatedUno, hand: resetEffectHand });
+        .emit('hand-updated', { hand: resetEffectHand });
 
       clearTimeout(timeoutID);
     }, 2000);
-
-    nextTurn = this.unosService.nextTurn(updatedUno, updatedUno.direction);
-    updatedUno.turn = nextTurn;
 
     return updatedUno;
   }
