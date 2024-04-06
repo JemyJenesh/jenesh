@@ -1,5 +1,5 @@
 import { Card, PlayerWithHand } from "@/store";
-import { Box } from "@mui/joy";
+import { Box, Typography } from "@mui/joy";
 import { UnoCard } from ".";
 
 export function PlayerHand({
@@ -20,33 +20,46 @@ export function PlayerHand({
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 1,
       }}
     >
-      {hand.cards?.map((card) => (
-        <Box
-          key={card.id}
-          sx={{
-            display: "inline-block",
-            transition: "transform 0.2s",
-            cursor: canThrow ? "pointer" : "not-allowed",
-            filter: `brightness(${active ? 100 : 70}%)`,
-            ...(active && {
-              "&:hover": {
-                transform: "translateY(-20px) scale(1.1)",
+      {active && (
+        <Typography level="h4" color="primary">
+          Your turn
+        </Typography>
+      )}
+      <Box
+        sx={{
+          display: "flex",
+        }}
+      >
+        {hand.cards?.map((card) => (
+          <Box
+            key={card.id}
+            sx={{
+              display: "inline-block",
+              transition: "transform 0.2s",
+              cursor: canThrow ? "pointer" : "not-allowed",
+              filter: `brightness(${active ? 100 : 70}%)`,
+              ...(active && {
+                "&:hover": {
+                  transform: "translateY(-20px) scale(1.1)",
+                },
+                "&:hover ~ div": {
+                  transform: `translateX(${cardSpread}px)`,
+                },
+              }),
+              "&:not(:first-of-type)": {
+                marginLeft: `-${cardSpread}px`,
               },
-              "&:hover ~ div": {
-                transform: `translateX(${cardSpread}px)`,
-              },
-            }),
-            "&:not(:first-of-type)": {
-              marginLeft: `-${cardSpread}px`,
-            },
-          }}
-        >
-          <UnoCard card={card} onClick={() => discard(card)} />
-        </Box>
-      ))}
+            }}
+          >
+            <UnoCard card={card} onClick={() => discard(card)} />
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }

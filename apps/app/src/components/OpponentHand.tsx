@@ -1,5 +1,5 @@
 import { PlayerWithHand } from "@/store";
-import { Avatar, Box, Stack, Typography } from "@mui/joy";
+import { Avatar, Box, Chip, Stack, Typography } from "@mui/joy";
 
 export function OpponentHand({
   player,
@@ -14,14 +14,30 @@ export function OpponentHand({
   return (
     <Stack spacing={1} alignItems={"center"}>
       <Typography>{name}</Typography>
-      <Avatar
-        size="lg"
-        src={avatar}
-        sx={{
-          "--Avatar-size": "75px",
-          animation: active ? "ping 1s infinite" : undefined,
-        }}
-      />
+      <Box sx={{ position: "relative" }}>
+        <Avatar
+          size="lg"
+          src={avatar}
+          sx={{
+            "--Avatar-size": "75px",
+            zIndex: 2,
+          }}
+        />
+        <Box
+          sx={{
+            height: "75px",
+            width: "75px",
+            borderRadius: "50%",
+            bgcolor: "primary.solidBg",
+            opacity: 0.75,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            zIndex: 0,
+            animation: active ? "ping 1s infinite" : undefined,
+          }}
+        />
+      </Box>
 
       <Box
         sx={{
@@ -37,6 +53,18 @@ export function OpponentHand({
         <Typography level="h4" textColor={"common.white"}>
           {hand.cards.length}
         </Typography>
+      </Box>
+      <Box>
+        {hand.cards.length === 1 && (
+          <Chip color="primary" variant="solid" size="lg">
+            Uno
+          </Chip>
+        )}
+        {hand.cards.length === 0 && (
+          <Chip color="primary" variant="solid" size="lg">
+            Winner
+          </Chip>
+        )}
       </Box>
     </Stack>
   );
