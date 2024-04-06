@@ -114,13 +114,46 @@ export class UnosGetaway {
     return updatedUno;
   }
 
-  private _drawTwo() {
-    // next turn
-    // draw two for the next turn
-    // braodcast draw-two even
-    // update next turn
-    // update uno
-    // broadcast card discard event
+  private _drawTwo(socket: Socket, uno: Uno) {
+    let updatedUno = { ...uno };
+
+    let nextTurn = this.unosService.nextTurn(updatedUno, updatedUno.direction);
+    updatedUno.turn = nextTurn;
+    this.unosService.update(updatedUno);
+
+    const skippedPlayer = updatedUno.playerIDs[nextTurn];
+    let skippedHand = this.handsService.findByUnoID(updatedUno.id, [
+      skippedPlayer,
+    ])[0];
+    skippedHand = this.handsService.updateHandEffect(
+      skippedHand.id,
+      'Two Cards Added',
+    );
+    const drawCardResponse = this.unosService.drawCards(
+      updatedUno.id,
+      skippedHand.id,
+      2,
+    );
+    updatedUno = drawCardResponse.uno;
+    skippedHand = drawCardResponse.hand;
+
+    nextTurn = this.unosService.nextTurn(updatedUno, updatedUno.direction);
+    updatedUno.turn = nextTurn;
+
+    socket.nsp.to(updatedUno.id).emit('hand-updated', { hand: skippedHand });
+
+    let timeoutID = setTimeout(() => {
+      const resetEffectHand = this.handsService.updateHandEffect(
+        skippedHand.id,
+      );
+      socket.nsp
+        .to(updatedUno.id)
+        .emit('hand-updated', { hand: resetEffectHand });
+
+      clearTimeout(timeoutID);
+    }, 2000);
+
+    return updatedUno;
   }
 
   @SubscribeMessage('discard')
@@ -153,12 +186,8 @@ export class UnosGetaway {
       updatedUno = this._reverse(uno);
       updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     } else if (removedCard.value === 'draw-two') {
-      // nextTurn = this.unosService.nextTurn(uno, newDirection);
-      // const skippedPlayer = this.unosService.getPlayerIDByTurn(uno, nextTurn);
-      // const hand = this.handsService.findByUnoID(unoID, [skippedPlayer])[0];
-      // const drawTwoHandAndUno = this.unosService.drawCards(unoID, hand.id, 2);
-      // uno = drawTwoHandAndUno.uno;
-      // client.nsp.to(unoID).emit('draw-two', drawTwoHandAndUno);
+      updatedUno = this._drawTwo(client, uno);
+      updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     } else {
       let nextTurn = this.unosService.nextTurn(
         updatedUno,
