@@ -114,7 +114,7 @@ export class UnosGetaway {
     return updatedUno;
   }
 
-  private _drawTwo(socket: Socket, uno: Uno) {
+  private _drawCards(socket: Socket, uno: Uno, count: number) {
     let updatedUno = { ...uno };
 
     let nextTurn = this.unosService.nextTurn(updatedUno, updatedUno.direction);
@@ -127,12 +127,12 @@ export class UnosGetaway {
     ])[0];
     skippedHand = this.handsService.updateHandEffect(
       skippedHand.id,
-      'Two Cards Added',
+      `${count} Cards Added`,
     );
     const drawCardResponse = this.unosService.drawCards(
       updatedUno.id,
       skippedHand.id,
-      2,
+      count,
     );
     updatedUno = drawCardResponse.uno;
     skippedHand = drawCardResponse.hand;
@@ -184,7 +184,10 @@ export class UnosGetaway {
       updatedUno = this._reverse(uno);
       updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     } else if (removedCard.value === 'draw-two') {
-      updatedUno = this._drawTwo(client, uno);
+      updatedUno = this._drawCards(client, uno, 2);
+      updatedUno = this._updateDiscardPile(updatedUno, removedCard);
+    } else if (removedCard.value === 'draw-four') {
+      updatedUno = this._drawCards(client, uno, 4);
       updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     } else {
       let nextTurn = this.unosService.nextTurn(
