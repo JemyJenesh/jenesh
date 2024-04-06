@@ -72,12 +72,15 @@ export class UnosGetaway {
     return updatedUno;
   }
 
-  private _reverse() {
-    // change direction
-    // next turn
-    // update hand: remove discard card from hand
-    // put discard card in the discard pile
-    // update uno: direction, turn, discard pile
+  private _reverse(uno: Uno) {
+    let updatedUno = { ...uno };
+
+    let newDirection = updatedUno.direction * -1;
+    let nextTurn = this.unosService.nextTurn(updatedUno, newDirection);
+    updatedUno.turn = nextTurn;
+    updatedUno.direction = newDirection === 1 ? 1 : -1;
+
+    return updatedUno;
   }
 
   private _skip(socket: Socket, uno: Uno) {
@@ -147,6 +150,8 @@ export class UnosGetaway {
       updatedUno = this._skip(client, uno);
       updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     } else if (removedCard.value === 'reverse') {
+      updatedUno = this._reverse(uno);
+      updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     } else if (removedCard.value === 'draw-two') {
       // nextTurn = this.unosService.nextTurn(uno, newDirection);
       // const skippedPlayer = this.unosService.getPlayerIDByTurn(uno, nextTurn);
