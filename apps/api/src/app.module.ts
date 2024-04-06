@@ -7,6 +7,7 @@ import { BingosModule } from './bingos/bingos.module';
 import { BoardsModule } from './boards/boards.module';
 import { PlayerMiddleware } from './player.middleware';
 import { PlayersModule } from './players/players.module';
+import { UnosModule } from './unos/unos.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PlayersModule } from './players/players.module';
     PlayersModule,
     BingosModule,
     BoardsModule,
+    UnosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

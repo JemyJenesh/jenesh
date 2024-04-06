@@ -1,5 +1,5 @@
 import animationData from "@/assets/lottie/winning2.json";
-import { Board, Player, useBingoWithPlayersBoard, usePlayer } from "@/store";
+import { PlayerWithHand, Uno, usePlayer } from "@/store";
 import {
   Box,
   Button,
@@ -11,7 +11,7 @@ import {
 } from "@mui/joy";
 import Lottie from "react-lottie";
 import { Link } from "react-router-dom";
-import { BingoBoard } from ".";
+import { UnoCard } from "./UnoCard";
 
 const defaultOptions = {
   loop: true,
@@ -22,24 +22,16 @@ const defaultOptions = {
   },
 };
 
-export function WinningModal({
-  board,
-  winnerID,
+export function WinningModalUno({
+  uno,
   players,
 }: {
-  board: Board;
-  players: Player[];
-  winnerID?: string;
+  uno: Uno;
+  players: PlayerWithHand[];
 }) {
   const { player } = usePlayer();
-  const { data, isLoading } = useBingoWithPlayersBoard(
-    board.bingoID,
-    winnerID!
-  );
-  const isWinner = player?.id === winnerID;
-  const winner = players.find((p) => p.id === winnerID)?.name;
-
-  if (isLoading) return <p>Loading...</p>;
+  const isWinner = player?.id === uno.winnerID;
+  const winner = players.find((p) => p.id === uno.winnerID)?.name;
 
   return (
     <Modal open={!!winner}>
@@ -64,25 +56,35 @@ export function WinningModal({
           <Stack
             sx={{
               width: "100%",
-              flexDirection: "row",
-              justifyContent: "center",
               mb: 5,
             }}
           >
-            <Box>
-              <Typography level="title-lg" textAlign={"center"}>
-                Your Board
-              </Typography>
-              <BingoBoard board={board} history={[]} emit={() => {}} />
-            </Box>
-            {!isWinner && (
-              <Box>
-                <Typography level="title-lg" textAlign={"center"}>
-                  {winner}'s Board
-                </Typography>
-                <BingoBoard board={data?.board!} history={[]} emit={() => {}} />
-              </Box>
-            )}
+            {players.map((p) => (
+              <Stack
+                key={p.id}
+                sx={{
+                  display: p.id === uno.winnerID ? "none" : "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography level="h4">{p.name}</Typography>
+                <Box>
+                  {p.hand.cards?.map((card) => (
+                    <Box
+                      key={card.id}
+                      sx={{
+                        display: "inline-block",
+                        "&:not(:first-of-type)": {
+                          marginLeft: `-20px`,
+                        },
+                      }}
+                    >
+                      <UnoCard card={card} onClick={() => {}} />
+                    </Box>
+                  ))}
+                </Box>
+              </Stack>
+            ))}
           </Stack>
           <Stack direction={"row"} justifyContent="center">
             <Button component={Link} to="/">

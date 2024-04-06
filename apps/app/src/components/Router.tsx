@@ -1,4 +1,12 @@
-import { Bingo, BingoRoom, Home, NotFoundPage, PlayerCreate } from "@/pages";
+import {
+  Bingo,
+  BingoRoom,
+  Home,
+  NotFoundPage,
+  PlayerCreate,
+  Uno,
+  UnoRoom,
+} from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrivateRoute } from ".";
 
@@ -28,6 +36,22 @@ export function Router() {
           element={
             <PrivateRoute>
               <Bingo />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/unos/:id/room"
+          element={
+            <PrivateRoute>
+              <UnoRoom />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/unos/:id"
+          element={
+            <PrivateRoute>
+              <Uno />
             </PrivateRoute>
           }
         />
