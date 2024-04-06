@@ -32,7 +32,7 @@ export class UnosService {
   }
 
   update(uno: Uno) {
-    return this.unos.update(uno);
+    this.unos.update(uno);
   }
 
   addPlayer(id: string, playerID: string) {
@@ -47,12 +47,12 @@ export class UnosService {
   start(id: string) {
     const uno = this.findOne(id);
     let deck = uno.drawPile;
+    const discardPile = deck.pop();
     let drawnCard: Card[];
     for (const playerID of uno.playerIDs) {
       ({ deck, drawnCard } = this.cardsService.draw(deck, 7));
       this.handsService.create(playerID, id, drawnCard);
     }
-    const discardPile = deck.pop();
     this.unos.update({
       ...uno,
       state: 'started',
@@ -74,9 +74,14 @@ export class UnosService {
     return { hand, uno: updatedUno };
   }
 
-  nextTurn(uno: Uno) {
-    const { turn, direction, playerIDs } = uno;
+  nextTurn(uno: Uno, direction: number) {
+    const { turn, playerIDs } = uno;
     const playersLength = playerIDs.length;
     return (turn + direction + playersLength) % playersLength;
+  }
+
+  getPlayerIDByTurn(uno: Uno, turn: number) {
+    const { playerIDs } = uno;
+    return playerIDs[turn];
   }
 }

@@ -6,4 +6,5 @@ export class Hand implements InMemoryDBEntity {
   playerID: string;
   unoID: string;
   cards: Card[];
+  effect?: string;
 }

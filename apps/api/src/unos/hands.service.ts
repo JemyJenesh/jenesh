@@ -25,6 +25,16 @@ export class HandsService {
     );
   }
 
+  updateHandEffect(id: string, effect: string) {
+    const hand = this.findOne(id);
+    const updatedHand = {
+      ...hand,
+      effect,
+    };
+    this.hands.update(updatedHand);
+    return updatedHand;
+  }
+
   addCards(id: string, cards: Card[]) {
     const hand = this.hands.get(id);
     const updatedHand = {

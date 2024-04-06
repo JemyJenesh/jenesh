@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
-import { Player, usePlayer } from ".";
+import { Player } from ".";
 
 export type Card = {
   id: string;
@@ -109,13 +109,28 @@ export function useUnoWithHands(id: string) {
 }
 
 export const useUnoSubscription = (id: string) => {
-  const { player } = usePlayer();
   const queryClient = useQueryClient();
   let socket = useRef<Socket>();
   const emit = (event: string, data: any) => {
     socket.current?.emit(event, data);
   };
   let intervalID: NodeJS.Timeout;
+
+  const updateUno = ({ uno, hand }: { uno: Uno; hand: Hand }) => {
+    queryClient.setQueriesData(["unos", "hands", id], (prev: any) => {
+      if (prev) {
+        const { players } = prev as GetUnoWithHandsResponse;
+        const data: GetUnoResponse = {
+          uno,
+          players: players.map((p) =>
+            p.id === hand.playerID ? { ...p, hand } : p
+          ),
+        };
+        return data;
+      }
+      return prev;
+    });
+  };
 
   useEffect(() => {
     socket.current = io(
@@ -126,43 +141,11 @@ export const useUnoSubscription = (id: string) => {
       socket.current?.emit("subscribe-uno", { unoID: id });
     });
 
-    socket.current.on(
-      "card-drawn",
-      ({ uno, hand }: { uno: Uno; hand: Hand }) => {
-        queryClient.setQueriesData(["unos", "hands", id], (prev: any) => {
-          if (prev) {
-            const { players } = prev as GetUnoWithHandsResponse;
-            const data: GetUnoResponse = {
-              uno,
-              players: players.map((p) =>
-                p.id === hand.playerID ? { ...p, hand } : p
-              ),
-            };
-            return data;
-          }
-          return prev;
-        });
-      }
-    );
+    socket.current.on("card-drawn", updateUno);
 
-    socket.current.on(
-      "card-thrown",
-      ({ uno, hand }: { uno: Uno; hand: Hand }) => {
-        queryClient.setQueriesData(["unos", "hands", id], (prev: any) => {
-          if (prev) {
-            const { players } = prev as GetUnoWithHandsResponse;
-            const data: GetUnoResponse = {
-              uno,
-              players: players.map((p) =>
-                p.id === hand.playerID ? { ...p, hand } : p
-              ),
-            };
-            return data;
-          }
-          return prev;
-        });
-      }
-    );
+    socket.current.on("card-thrown", updateUno);
+
+    socket.current.on("hand-updated", updateUno);
 
     return () => {
       clearInterval(intervalID);
