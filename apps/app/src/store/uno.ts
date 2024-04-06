@@ -164,6 +164,8 @@ export const useUnoSubscription = (id: string) => {
 
     socket.current.on("hand-updated", updateHand);
 
+    socket.current.on("uno", updateUno);
+
     return () => {
       clearInterval(intervalID);
       socket.current?.close();

@@ -5,6 +5,7 @@ import {
   OpponentHand,
   PlayerHand,
   UnoCard,
+  WinningModalUno,
 } from "@/components";
 import { Card, usePlayer, useUnoSubscription, useUnoWithHands } from "@/store";
 import { Box, Button, Stack } from "@mui/joy";
@@ -130,6 +131,7 @@ export function Uno() {
       }}
       spacing={2}
     >
+      <WinningModalUno uno={uno} players={players} />
       <ColorModal open={showColorModal}>
         <ColorList onSelectColor={handleWildCardDiscard} />
       </ColorModal>

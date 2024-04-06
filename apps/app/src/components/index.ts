@@ -11,3 +11,4 @@ export * from "./PrivateRoute";
 export * from "./Router";
 export * from "./UnoCard";
 export * from "./WinningModal";
+export * from "./WinningModalUno";

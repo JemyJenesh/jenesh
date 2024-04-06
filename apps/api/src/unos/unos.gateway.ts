@@ -169,7 +169,7 @@ export class UnosGetaway {
     const { handID, unoID, cardID, chosenColor } = data;
     let { hand, removedCard } = this.handsService.removeCard(handID, cardID);
     let uno = this.unosService.findOne(unoID);
-    let updatedUno = uno;
+    let updatedUno = { ...uno };
     if (removedCard.type === 'wild' && chosenColor) {
       removedCard = this.cardsService.changeWildCardColor(
         removedCard,
@@ -197,6 +197,13 @@ export class UnosGetaway {
       updatedUno.turn = nextTurn;
       updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     }
-    client.nsp.to(unoID).emit('card-thrown', { uno: updatedUno, hand });
+    if (hand.cards.length) {
+      client.nsp.to(unoID).emit('card-thrown', { uno: updatedUno, hand });
+    } else {
+      updatedUno.state = 'over';
+      updatedUno.winnerID = hand.playerID;
+      this.unosService.update(updatedUno);
+      client.nsp.to(unoID).emit('uno', { uno: updatedUno, hand });
+    }
   }
 }
