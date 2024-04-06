@@ -170,14 +170,12 @@ export class UnosGetaway {
     let { hand, removedCard } = this.handsService.removeCard(handID, cardID);
     let uno = this.unosService.findOne(unoID);
     let updatedUno = uno;
-    // if (removedCard.type === 'wild' && chosenColor) {
-    //   removedCard = this.cardsService.changeWildCardColor(
-    //     removedCard,
-    //     chosenColor,
-    //   );
-    // }
-    // let nextTurn = uno.turn;
-    // let newDirection = uno.direction;
+    if (removedCard.type === 'wild' && chosenColor) {
+      removedCard = this.cardsService.changeWildCardColor(
+        removedCard,
+        chosenColor,
+      );
+    }
 
     if (removedCard.value === 'skip') {
       updatedUno = this._skip(client, uno);
