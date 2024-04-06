@@ -10,5 +10,5 @@ export * from "./PlayerHand";
 export * from "./PrivateRoute";
 export * from "./Router";
 export * from "./UnoCard";
-export * from "./WinningModal";
+export * from "./WinningModalBingo";
 export * from "./WinningModalUno";

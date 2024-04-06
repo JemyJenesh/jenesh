@@ -22,7 +22,7 @@ const defaultOptions = {
   },
 };
 
-export function WinningModal({
+export function WinningModalBingo({
   board,
   winnerID,
   players,

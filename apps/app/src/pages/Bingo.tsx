@@ -1,4 +1,4 @@
-import { BingoBalls, BingoBoard, WinningModal } from "@/components";
+import { BingoBalls, BingoBoard, WinningModalBingo } from "@/components";
 import {
   useBingoSubscription,
   useBingoWithPlayersBoard,
@@ -25,7 +25,11 @@ export function Bingo() {
     <Stack sx={{ alignItems: "center", px: 3, py: 5, gap: 3 }}>
       <BingoBalls history={bingo.history} progress={progress} />
       <BingoBoard board={board} history={bingo.history} emit={emit} />
-      <WinningModal board={board} players={players} winnerID={bingo.winnerID} />
+      <WinningModalBingo
+        board={board}
+        players={players}
+        winnerID={bingo.winnerID}
+      />
     </Stack>
   );
 }
