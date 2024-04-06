@@ -84,4 +84,17 @@ export class UnosService {
     const { playerIDs } = uno;
     return playerIDs[turn];
   }
+
+  restockDrawPile(uno: Uno) {
+    let updatedUno = { ...uno };
+    const { discardPile, drawPile } = updatedUno;
+    const lastCard = discardPile.pop();
+
+    updatedUno.discardPile = [lastCard];
+    updatedUno.drawPile = this.cardsService.shuffleDeck([
+      ...drawPile,
+      ...discardPile,
+    ]);
+    return updatedUno;
+  }
 }

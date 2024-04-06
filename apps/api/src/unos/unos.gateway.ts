@@ -55,10 +55,13 @@ export class UnosGetaway {
     const { handID, unoID } = data;
     const { hand, uno } = this.unosService.drawCards(unoID, handID, 1);
     const nextTurn = this.unosService.nextTurn(uno, uno.direction);
-    const updatedUno: Uno = {
+    let updatedUno: Uno = {
       ...uno,
       turn: nextTurn,
     };
+    if (updatedUno.drawPile.length < 10) {
+      updatedUno = this.unosService.restockDrawPile(updatedUno);
+    }
     this.unosService.update(updatedUno);
     client.nsp.to(unoID).emit('card-drawn', { uno: updatedUno, hand });
   }
@@ -197,6 +200,12 @@ export class UnosGetaway {
       updatedUno.turn = nextTurn;
       updatedUno = this._updateDiscardPile(updatedUno, removedCard);
     }
+
+    if (updatedUno.drawPile.length < 10) {
+      updatedUno = this.unosService.restockDrawPile(updatedUno);
+      this.unosService.update(updatedUno);
+    }
+
     if (hand.cards.length) {
       client.nsp.to(unoID).emit('card-thrown', { uno: updatedUno, hand });
     } else {
