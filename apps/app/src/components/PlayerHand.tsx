@@ -1,5 +1,5 @@
 import { Card, PlayerWithHand } from "@/store";
-import { Box, Typography } from "@mui/joy";
+import { Box, Chip, Typography } from "@mui/joy";
 import { UnoCard } from ".";
 
 export function PlayerHand({
@@ -29,6 +29,11 @@ export function PlayerHand({
         <Typography level="h4" color="primary">
           Your turn
         </Typography>
+      )}
+      {hand.effect && (
+        <Chip color="danger" variant="solid" size="lg">
+          {hand.effect}
+        </Chip>
       )}
       <Box
         sx={{

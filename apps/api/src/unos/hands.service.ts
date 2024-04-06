@@ -25,7 +25,7 @@ export class HandsService {
     );
   }
 
-  updateHandEffect(id: string, effect: string) {
+  updateHandEffect(id: string, effect?: string) {
     const hand = this.findOne(id);
     const updatedHand = {
       ...hand,

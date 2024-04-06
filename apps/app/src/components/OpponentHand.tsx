@@ -65,6 +65,11 @@ export function OpponentHand({
             Winner
           </Chip>
         )}
+        {hand.effect && (
+          <Chip color="danger" variant="solid" size="lg">
+            {hand.effect}
+          </Chip>
+        )}
       </Box>
     </Stack>
   );

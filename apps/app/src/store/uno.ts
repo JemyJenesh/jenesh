@@ -42,6 +42,7 @@ export type Hand = {
   playerID: string;
   unoID: string;
   cards: Card[];
+  effect?: string;
 };
 
 export function useUnoCreate() {
