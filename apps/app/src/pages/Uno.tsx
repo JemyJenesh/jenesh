@@ -1,6 +1,7 @@
 import {
   ColorList,
   ColorModal,
+  DirectionIndicator,
   OpponentHand,
   PlayerHand,
   UnoCard,
@@ -104,18 +105,16 @@ export function Uno() {
     return (
       <Stack spacing={1}>
         <UnoCard card={discardCard} />
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Box
-            sx={{
-              visibility: discardCard.type === "wild" ? "visible" : "hidden",
-              height: 36,
-              width: "100%",
-              borderRadius: "4px",
-              bgcolor: colors[discardCard.selectedColor ?? "transparent"],
-            }}
-          />
-        </Box>
-        <Box />
+
+        <Box
+          sx={{
+            visibility: discardCard.type === "wild" ? "visible" : "hidden",
+            height: 36,
+            width: "100%",
+            borderRadius: "4px",
+            bgcolor: colors[discardCard.selectedColor ?? "transparent"],
+          }}
+        />
       </Stack>
     );
     return;
@@ -143,7 +142,24 @@ export function Uno() {
           />
         ))}
       </Stack>
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <Box
+          sx={{
+            animationName: uno.direction === 1 ? "spin" : "spin-reverse",
+            animationDuration: "5s",
+            animationIterationCount: "infinite",
+            animationTimingFunction: "linear",
+          }}
+        >
+          <DirectionIndicator direction={uno.direction} />
+        </Box>
         {renderDrawPile()}
         {renderDiscardPile()}
       </Box>

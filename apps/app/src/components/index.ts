@@ -2,6 +2,7 @@ export * from "./BingoBalls";
 export * from "./BingoBoard";
 export * from "./ColorModal";
 export * from "./CopyButton";
+export * from "./DirectionIndicator";
 export * from "./GameCard";
 export * from "./OpponentHand";
 export * from "./PlayerCard";
