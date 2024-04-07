@@ -7,14 +7,14 @@ export function DirectionIndicator({ direction }: { direction: 1 | -1 }) {
       style={{
         width: "100%",
         height: "100%",
-        transform: `rotateY(${deg}deg)`,
+        transform: `rotateY(${deg}deg) scale(0.75)`,
       }}
       version="1.1"
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="110px"
-      height="110px"
+      width="100px"
+      height="100px"
       viewBox="0 0 396.593 396.594"
       xmlSpace="preserve"
     >
