@@ -79,7 +79,7 @@ export function WinningModalUno({
                         },
                       }}
                     >
-                      <UnoCard card={card} onClick={() => {}} />
+                      <UnoCard card={card} />
                     </Box>
                   ))}
                 </Box>

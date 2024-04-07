@@ -1,5 +1,6 @@
 import { PlayerWithHand } from "@/store";
 import { Avatar, Box, Chip, Stack, Typography } from "@mui/joy";
+import { UnoCard } from "./UnoCard";
 
 export function OpponentHand({
   player,
@@ -13,47 +14,56 @@ export function OpponentHand({
 
   return (
     <Stack spacing={1} alignItems={"center"}>
-      <Typography>{name}</Typography>
-      <Box sx={{ position: "relative" }}>
-        <Avatar
-          size="lg"
-          src={avatar}
-          sx={{
-            "--Avatar-size": "75px",
-            zIndex: 2,
-          }}
-        />
+      <Typography level="title-lg">{name}</Typography>
+      <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <Box sx={{ position: "relative" }}>
+          <Avatar
+            size="lg"
+            src={avatar}
+            sx={{
+              "--Avatar-size": "75px",
+              zIndex: 2,
+            }}
+          />
+          <Box
+            sx={{
+              height: "75px",
+              width: "75px",
+              borderRadius: "50%",
+              bgcolor: "primary.solidBg",
+              opacity: 0.75,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              zIndex: 0,
+              animation: active ? "ping 1s infinite" : undefined,
+            }}
+          />
+        </Box>
         <Box
           sx={{
-            height: "75px",
-            width: "75px",
-            borderRadius: "50%",
-            bgcolor: "primary.solidBg",
-            opacity: 0.75,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            zIndex: 0,
-            animation: active ? "ping 1s infinite" : undefined,
+            height: 40,
+            width: 27,
+            display: "grid",
+            placeContent: "center",
+            borderRadius: "4px",
+            backgroundColor: "gray",
           }}
-        />
+        >
+          <Typography level="h4" textColor={"common.white"}>
+            {hand.cards.length}
+          </Typography>
+        </Box>
       </Box>
 
-      <Box
-        sx={{
-          height: 80,
-          width: 55,
-          display: "grid",
-          placeContent: "center",
-          borderRadius: "4px",
-          backgroundColor: "gray",
-          border: "3px solid white",
-        }}
-      >
-        <Typography level="h4" textColor={"common.white"}>
-          {hand.cards.length}
-        </Typography>
+      <Box sx={{ position: "relative", width: "100px", height: "150px" }}>
+        {player.hand.cards.map((card) => (
+          <Box key={card.id} sx={{ position: "absolute", inset: 0 }}>
+            <UnoCard card={card} showBack />
+          </Box>
+        ))}
       </Box>
+
       <Box>
         {hand.cards.length === 1 && (
           <Chip color="primary" variant="solid" size="lg">

@@ -105,7 +105,7 @@ export function Uno() {
     };
     return (
       <Stack spacing={1}>
-        <Box sx={{ position: "relative", width: "100px" }}>
+        <Box sx={{ position: "relative", width: "100px", height: "150px" }}>
           {uno.discardPile.map((card) => (
             <Box key={card.id} sx={{ position: "absolute", inset: 0 }}>
               <UnoCard card={card} />

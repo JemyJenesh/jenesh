@@ -20,11 +20,6 @@ export function UnoCard({
       initial={{
         rotateY: showBack ? 180 : 0,
       }}
-      animate={
-        !showBack && {
-          rotateY: 0,
-        }
-      }
       style={{
         position: "relative",
         transformStyle: "preserve-3d",
