@@ -78,13 +78,13 @@ export function Uno() {
   const renderDrawPile = () => {
     return (
       <Stack spacing={1}>
-        <img
-          style={{
-            height: 150,
-          }}
-          draggable={false}
-          src={`/static/uno/deck.png`}
-        />
+        <Box sx={{ position: "relative", width: "100px", height: "150px" }}>
+          {uno.drawPile.map((card) => (
+            <Box key={card.id} sx={{ position: "absolute", inset: 0 }}>
+              <UnoCard card={card} showBack />
+            </Box>
+          ))}
+        </Box>
 
         <Button
           sx={{ visibility: canDraw ? "visible" : "hidden" }}
@@ -105,7 +105,13 @@ export function Uno() {
     };
     return (
       <Stack spacing={1}>
-        <UnoCard card={discardCard} />
+        <Box sx={{ position: "relative", width: "100px" }}>
+          {uno.discardPile.map((card) => (
+            <Box key={card.id} sx={{ position: "absolute", inset: 0 }}>
+              <UnoCard card={card} />
+            </Box>
+          ))}
+        </Box>
 
         <Box
           sx={{
@@ -118,7 +124,6 @@ export function Uno() {
         />
       </Stack>
     );
-    return;
   };
 
   return (
@@ -148,7 +153,6 @@ export function Uno() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
           gap: 2,
         }}
       >
