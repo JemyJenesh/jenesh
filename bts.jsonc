@@ -1,0 +1,21 @@
+// Better-T-Stack configuration file
+// safe to delete
+
+{
+	"$schema": "https://r2.better-t-stack.dev/schema.json",
+	"version": "2.38.2",
+	"createdAt": "2025-08-29T08:10:17.037Z",
+	"database": "sqlite",
+	"orm": "prisma",
+	"backend": "express",
+	"runtime": "node",
+	"frontend": ["next"],
+	"addons": ["turborepo"],
+	"examples": [],
+	"auth": "none",
+	"packageManager": "pnpm",
+	"dbSetup": "none",
+	"api": "none",
+	"webDeploy": "none",
+	"serverDeploy": "none"
+}
