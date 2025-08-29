@@ -12,7 +12,12 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { GithubIcon, LinkedinIcon, MenuIcon } from "lucide-react";
+import {
+  ExternalLinkIcon,
+  GithubIcon,
+  LinkedinIcon,
+  MenuIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -68,6 +73,11 @@ export default function Navbar() {
                 <DropdownMenuItem asChild>
                   <Link href="/about">About</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href="/games" target="_blank" rel="noopener noreferrer">
+                    Games <ExternalLinkIcon />
+                  </a>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </NavigationMenuItem>
@@ -88,6 +98,13 @@ export default function Navbar() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavLink href="/about">About</NavLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Button variant="secondary" asChild>
+              <a href="/games" target="_blank" rel="noopener noreferrer">
+                Games <ExternalLinkIcon />
+              </a>
+            </Button>
           </NavigationMenuItem>
 
           {renderContactLinks()}

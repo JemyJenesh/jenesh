@@ -8,7 +8,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const GameState = {
+  WAITING: 'WAITING',
+  STARTED: 'STARTED',
+  OVER: 'OVER'
+} as const
+
+export type GameState = (typeof GameState)[keyof typeof GameState]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const GameType = {
+  BINGO: 'BINGO'
+} as const
+
+export type GameType = (typeof GameType)[keyof typeof GameType]

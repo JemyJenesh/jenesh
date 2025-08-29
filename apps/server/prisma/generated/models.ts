@@ -7,4 +7,9 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Player'
+export type * from './models/Game'
+export type * from './models/GamePlayer'
+export type * from './models/Bingo'
+export type * from './models/Board'
 export type * from './commonInputTypes'

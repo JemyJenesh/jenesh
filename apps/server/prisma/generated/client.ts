@@ -26,8 +26,8 @@ export * as $Enums from './enums'
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Players
+ * const players = await prisma.player.findMany()
  * ```
  * 
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
@@ -41,6 +41,34 @@ export { Prisma }
 path.join(__dirname, "query_engine-windows.dll.node")
 path.join(process.cwd(), "prisma/generated/query_engine-windows.dll.node")
 
+/**
+ * Model Player
+ * 
+ */
+export type Player = Prisma.PlayerModel
+/**
+ * Model Game
+ * 
+ */
+export type Game = Prisma.GameModel
+/**
+ * Model GamePlayer
+ * 
+ */
+export type GamePlayer = Prisma.GamePlayerModel
+/**
+ * Model Bingo
+ * 
+ */
+export type Bingo = Prisma.BingoModel
+/**
+ * Model Board
+ * 
+ */
+export type Board = Prisma.BoardModel
 
+export type GameState = $Enums.GameState
+export const GameState = $Enums.GameState
 
-
+export type GameType = $Enums.GameType
+export const GameType = $Enums.GameType

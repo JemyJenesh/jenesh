@@ -394,7 +394,11 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-
+  Player: 'Player',
+  Game: 'Game',
+  GamePlayer: 'GamePlayer',
+  Bingo: 'Bingo',
+  Board: 'Board'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -410,10 +414,381 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: never
+    modelProps: "player" | "game" | "gamePlayer" | "bingo" | "board"
     txIsolationLevel: TransactionIsolationLevel
   }
-  model: {}
+  model: {
+    Player: {
+      payload: Prisma.$PlayerPayload<ExtArgs>
+      fields: Prisma.PlayerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlayerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlayerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>
+        }
+        findFirst: {
+          args: Prisma.PlayerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlayerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>
+        }
+        findMany: {
+          args: Prisma.PlayerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>[]
+        }
+        create: {
+          args: Prisma.PlayerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>
+        }
+        createMany: {
+          args: Prisma.PlayerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlayerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>[]
+        }
+        delete: {
+          args: Prisma.PlayerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>
+        }
+        update: {
+          args: Prisma.PlayerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlayerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlayerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlayerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlayerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerPayload>
+        }
+        aggregate: {
+          args: Prisma.PlayerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlayer>
+        }
+        groupBy: {
+          args: Prisma.PlayerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlayerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerCountAggregateOutputType> | number
+        }
+      }
+    }
+    Game: {
+      payload: Prisma.$GamePayload<ExtArgs>
+      fields: Prisma.GameFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GameFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GameFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
+        }
+        findFirst: {
+          args: Prisma.GameFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GameFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
+        }
+        findMany: {
+          args: Prisma.GameFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>[]
+        }
+        create: {
+          args: Prisma.GameCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
+        }
+        createMany: {
+          args: Prisma.GameCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GameCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>[]
+        }
+        delete: {
+          args: Prisma.GameDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
+        }
+        update: {
+          args: Prisma.GameUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
+        }
+        deleteMany: {
+          args: Prisma.GameDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GameUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GameUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>[]
+        }
+        upsert: {
+          args: Prisma.GameUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
+        }
+        aggregate: {
+          args: Prisma.GameAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGame>
+        }
+        groupBy: {
+          args: Prisma.GameGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GameGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GameCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GameCountAggregateOutputType> | number
+        }
+      }
+    }
+    GamePlayer: {
+      payload: Prisma.$GamePlayerPayload<ExtArgs>
+      fields: Prisma.GamePlayerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GamePlayerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GamePlayerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>
+        }
+        findFirst: {
+          args: Prisma.GamePlayerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GamePlayerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>
+        }
+        findMany: {
+          args: Prisma.GamePlayerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>[]
+        }
+        create: {
+          args: Prisma.GamePlayerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>
+        }
+        createMany: {
+          args: Prisma.GamePlayerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GamePlayerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>[]
+        }
+        delete: {
+          args: Prisma.GamePlayerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>
+        }
+        update: {
+          args: Prisma.GamePlayerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>
+        }
+        deleteMany: {
+          args: Prisma.GamePlayerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GamePlayerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GamePlayerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>[]
+        }
+        upsert: {
+          args: Prisma.GamePlayerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePlayerPayload>
+        }
+        aggregate: {
+          args: Prisma.GamePlayerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGamePlayer>
+        }
+        groupBy: {
+          args: Prisma.GamePlayerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GamePlayerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GamePlayerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GamePlayerCountAggregateOutputType> | number
+        }
+      }
+    }
+    Bingo: {
+      payload: Prisma.$BingoPayload<ExtArgs>
+      fields: Prisma.BingoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BingoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BingoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>
+        }
+        findFirst: {
+          args: Prisma.BingoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BingoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>
+        }
+        findMany: {
+          args: Prisma.BingoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>[]
+        }
+        create: {
+          args: Prisma.BingoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>
+        }
+        createMany: {
+          args: Prisma.BingoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BingoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>[]
+        }
+        delete: {
+          args: Prisma.BingoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>
+        }
+        update: {
+          args: Prisma.BingoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>
+        }
+        deleteMany: {
+          args: Prisma.BingoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BingoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BingoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>[]
+        }
+        upsert: {
+          args: Prisma.BingoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BingoPayload>
+        }
+        aggregate: {
+          args: Prisma.BingoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBingo>
+        }
+        groupBy: {
+          args: Prisma.BingoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BingoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BingoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BingoCountAggregateOutputType> | number
+        }
+      }
+    }
+    Board: {
+      payload: Prisma.$BoardPayload<ExtArgs>
+      fields: Prisma.BoardFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BoardFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BoardFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>
+        }
+        findFirst: {
+          args: Prisma.BoardFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BoardFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>
+        }
+        findMany: {
+          args: Prisma.BoardFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>[]
+        }
+        create: {
+          args: Prisma.BoardCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>
+        }
+        createMany: {
+          args: Prisma.BoardCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BoardCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>[]
+        }
+        delete: {
+          args: Prisma.BoardDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>
+        }
+        update: {
+          args: Prisma.BoardUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>
+        }
+        deleteMany: {
+          args: Prisma.BoardDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BoardUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BoardUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>[]
+        }
+        upsert: {
+          args: Prisma.BoardUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardPayload>
+        }
+        aggregate: {
+          args: Prisma.BoardAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBoard>
+        }
+        groupBy: {
+          args: Prisma.BoardGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BoardCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardCountAggregateOutputType> | number
+        }
+      }
+    }
+  }
 } & {
   other: {
     payload: any
@@ -449,7 +824,149 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const PlayerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  avatar: 'avatar'
+} as const
 
+export type PlayerScalarFieldEnum = (typeof PlayerScalarFieldEnum)[keyof typeof PlayerScalarFieldEnum]
+
+
+export const GameScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  state: 'state',
+  hostId: 'hostId',
+  winnerId: 'winnerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GameScalarFieldEnum = (typeof GameScalarFieldEnum)[keyof typeof GameScalarFieldEnum]
+
+
+export const GamePlayerScalarFieldEnum = {
+  gameId: 'gameId',
+  playerId: 'playerId'
+} as const
+
+export type GamePlayerScalarFieldEnum = (typeof GamePlayerScalarFieldEnum)[keyof typeof GamePlayerScalarFieldEnum]
+
+
+export const BingoScalarFieldEnum = {
+  id: 'id',
+  history: 'history',
+  gameId: 'gameId'
+} as const
+
+export type BingoScalarFieldEnum = (typeof BingoScalarFieldEnum)[keyof typeof BingoScalarFieldEnum]
+
+
+export const BoardScalarFieldEnum = {
+  id: 'id',
+  cells: 'cells',
+  playerId: 'playerId',
+  bingoId: 'bingoId'
+} as const
+
+export type BoardScalarFieldEnum = (typeof BoardScalarFieldEnum)[keyof typeof BoardScalarFieldEnum]
+
+
+export const SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+} as const
+
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+
+/**
+ * Field references
+ */
+
+
+/**
+ * Reference to a field of type 'String'
+ */
+export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+/**
+ * Reference to a field of type 'GameType'
+ */
+export type EnumGameTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GameType'>
+    
+
+
+/**
+ * Reference to a field of type 'GameState'
+ */
+export type EnumGameStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GameState'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
 
 /**
  * Batch Payload for updateMany & deleteMany & createMany
@@ -533,7 +1050,13 @@ export interface PrismaClientOptions {
    */
   omit?: GlobalOmitConfig
 }
-export type GlobalOmitConfig = {}
+export type GlobalOmitConfig = {
+  player?: Prisma.PlayerOmit
+  game?: Prisma.GameOmit
+  gamePlayer?: Prisma.GamePlayerOmit
+  bingo?: Prisma.BingoOmit
+  board?: Prisma.BoardOmit
+}
 
 /* Types for Logging */
 export type LogLevel = 'info' | 'query' | 'warn' | 'error'
