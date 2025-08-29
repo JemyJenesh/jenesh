@@ -1,7 +1,7 @@
 import AboutMeSection from "@/app/(portfolio)/about/components/about-me-section";
 import HardwareSection from "@/app/(portfolio)/about/components/hardware-section";
 import myPhoto from "@/assets/me.jpg";
-import myPCPhoto from "@/assets/myPC1.jpg";
+import myPCPhoto from "@/assets/myPC.jpg";
 import Image from "next/image";
 
 export default function About() {
