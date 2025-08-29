@@ -1,41 +1,43 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "../index.css";
 import Providers from "@/components/providers";
-import Header from "@/components/header";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-	title: "jenesh-new",
-	description: "jenesh-new",
+  title: "Jenesh | Portfolio",
+  description:
+    "Portfolio of Jenesh Pradhananga - Full Stack Developer specializing in modern web applications, and scalable backend solutions.",
+  keywords: [
+    "Jemy Jenesh",
+    "Jenesh",
+    "Jenesh Pradhananga",
+    "Portfolio",
+    "Full Stack Developer",
+    "Web Developer",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "Software Engineer",
+  ],
+  authors: [{ name: "Jemy Jenesh" }],
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-			>
-				<Providers>
-					<div className="grid grid-rows-[auto_1fr] h-svh">
-						<Header />
-						{children}
-					</div>
-				</Providers>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased`}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }
