@@ -6,8 +6,12 @@ import { playerService } from "@/player/service";
 import type { Request, Response } from "express";
 
 const controller = {
-  get: async (req: Request, res: Response) => {
-    const id = req.params.id;
+  getMe: async (req: Request, res: Response) => {
+    const id = req.cookies.playerId;
+
+    if (!id) {
+      return res.status(404).json();
+    }
 
     const data = await playerService.get(id);
 
@@ -17,7 +21,19 @@ const controller = {
         maxAge: 0,
       });
 
-      return res.status(401);
+      return res.status(404).json();
+    }
+
+    return res.json(data);
+  },
+
+  get: async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const data = await playerService.get(id);
+
+    if (!data) {
+      return res.status(404);
     }
 
     return res.json(data);
