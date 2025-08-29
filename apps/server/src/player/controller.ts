@@ -1,0 +1,48 @@
+import {
+  playerCreateInputSchema,
+  playerUpdateInputSchema,
+} from "@/player/schema";
+import { playerService } from "@/player/service";
+import type { Request, Response } from "express";
+
+const controller = {
+  get: async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const data = await playerService.get(id);
+
+    if (!data) {
+      res.cookie("playerId", id, {
+        httpOnly: true,
+        maxAge: 0,
+      });
+
+      return res.status(401);
+    }
+
+    return res.json(data);
+  },
+
+  create: async (req: Request, res: Response) => {
+    const body = playerCreateInputSchema.parse(req.body);
+
+    const data = await playerService.create(body);
+
+    res.cookie("playerId", data.id, {
+      httpOnly: true,
+      expires: new Date("9999-12-31T23:59:59Z"),
+    });
+
+    return res.json(data);
+  },
+
+  update: async (req: Request, res: Response) => {
+    const body = playerUpdateInputSchema.parse(req.body);
+
+    const data = await playerService.update(body);
+
+    return res.json(data);
+  },
+};
+
+export const playerController = controller;

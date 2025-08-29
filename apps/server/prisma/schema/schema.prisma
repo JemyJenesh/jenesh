@@ -1,10 +1,85 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated"
+  provider     = "prisma-client"
+  output       = "../generated"
   moduleFormat = "esm"
 }
 
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Player {
+  id     String @id @default(cuid())
+  name   String
+  avatar String
+
+  hostedGames Game[]       @relation("Host")
+  wonGames    Game[]       @relation("Winner")
+  playedGames GamePlayer[]
+  boards      Board[]
+
+  @@map("players")
+}
+
+model Game {
+  id        String    @id @default(cuid())
+  name      String?
+  type      GameType
+  state     GameState @default(WAITING)
+  hostId    String
+  winnerId  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  host    Player       @relation("Host", fields: [hostId], references: [id])
+  winner  Player?      @relation("Winner", fields: [winnerId], references: [id])
+  players GamePlayer[]
+  bingos  Bingo[]
+
+  @@map("games")
+}
+
+model GamePlayer {
+  gameId   String
+  playerId String
+
+  game   Game   @relation(fields: [gameId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@id([gameId, playerId])
+  @@map("game_players")
+}
+
+model Bingo {
+  id      String @id @default(cuid())
+  history Json   @default("[]")
+  gameId  String
+
+  game   Game    @relation(fields: [gameId], references: [id])
+  boards Board[]
+
+  @@map("bingos")
+}
+
+model Board {
+  id       String @id @default(cuid())
+  cells    Json   @default("[]")
+  playerId String
+  bingoId  String
+
+  player Player @relation(fields: [playerId], references: [id])
+  bingo  Bingo  @relation(fields: [bingoId], references: [id])
+
+  @@map("boards")
+}
+
+enum GameState {
+  WAITING
+  STARTED
+  OVER
+}
+
+enum GameType {
+  BINGO
 }
