@@ -3,7 +3,6 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("/me", playerController.getMe);
 router.get("/:id", playerController.get);
 router.post("/", playerController.create);
 router.put("/", playerController.update);

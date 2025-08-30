@@ -1,5 +1,7 @@
 "use client";
 
+import Loader from "@/components/loader";
+import { axiosInstance } from "@/lib/axios";
 import type { Player } from "@/schema/player";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -17,14 +19,9 @@ const PlayerContext = createContext<InitialPlayerContext>({
   togglePlayerModal: () => {},
 });
 
-export function PlayerProvider({
-  children,
-  initialPlayer,
-}: {
-  children: React.ReactNode;
-  initialPlayer: Player | null;
-}) {
-  const [player, setPlayer] = useState(initialPlayer);
+export function PlayerProvider({ children }: { children: React.ReactNode }) {
+  const [loading, setLoading] = useState(false);
+  const [player, setPlayer] = useState<Player | null>(null);
   const [isPlayerModalOpen, setIsPlayerModalOpen] = useState(false);
 
   const togglePlayerModal = (open?: boolean) => {
@@ -37,16 +34,37 @@ export function PlayerProvider({
   };
 
   useEffect(() => {
-    if (!initialPlayer) {
-      setIsPlayerModalOpen(true);
-    }
-  }, [initialPlayer, setIsPlayerModalOpen]);
+    const loadPlayer = async () => {
+      setLoading(true);
+      const playerId = localStorage.getItem("playerId");
+
+      if (!playerId) {
+        setIsPlayerModalOpen(true);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data } = await axiosInstance.get<Player>(
+          `/api/players/${playerId}`
+        );
+
+        setPlayer(data);
+      } catch (err) {
+        setIsPlayerModalOpen(true);
+      }
+
+      setLoading(false);
+    };
+
+    loadPlayer();
+  }, []);
 
   return (
     <PlayerContext.Provider
       value={{ isPlayerModalOpen, player, setPlayer, togglePlayerModal }}
     >
-      {children}
+      {loading ? <Loader /> : children}
     </PlayerContext.Provider>
   );
 }

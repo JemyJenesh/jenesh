@@ -49,6 +49,7 @@ export default function PlayerModal() {
         onSuccess: (data) => {
           setPlayer(data);
           toast.success(`Welcome, ${data.name}!`);
+          localStorage.setItem("playerId", data.id);
         },
       });
     } else {

@@ -2,7 +2,6 @@ import a from "axios";
 
 export const axiosInstance = a.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
-  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
