@@ -1,5 +1,5 @@
 import type { PlayerCreateInput, PlayerUpdateInput } from "@/player/schema";
-import prismaClient from "@/prisma";
+import { prismaClient } from "@/prisma";
 
 const service = {
   get: async (id: string) => {
