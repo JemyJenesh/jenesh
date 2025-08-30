@@ -8,7 +8,9 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/prisma": ["./prisma/index.ts"],
+      "prisma": ["node_modules/prisma"]
     },
     "outDir": "./dist",
     "types": ["node"],

@@ -5,13 +5,15 @@ export const axiosInstance = a.create({
   withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use(async (config) => {
   const isServer = typeof window === "undefined";
 
   if (isServer) {
     const { cookies } = require("next/headers");
+    const cookieStore = await cookies();
     config.headers = config.headers || {};
-    (config.headers as Record<string, string>)["Cookie"] = cookies().toString();
+    (config.headers as Record<string, string>)["Cookie"] =
+      cookieStore.toString();
     return config;
   }
 
