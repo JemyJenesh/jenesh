@@ -1,6 +1,7 @@
 "use client";
 
 import GameActions from "@/app/games/[id]/components/game-actions";
+import GameContextProvider from "@/app/games/[id]/components/game-context-provider";
 import PlayerList from "@/app/games/[id]/components/player-list";
 import Loader from "@/components/loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -20,7 +21,6 @@ export default function Page() {
   });
 
   useEffect(() => {
-    console.log(data?.state);
     if (data?.state === "STARTED") {
       switch (data.type) {
         case "BINGO":
@@ -47,13 +47,13 @@ export default function Page() {
     );
   }
 
-  const { hostId, players } = data;
-
   return (
-    <div className="flex flex-col gap-6">
-      <p className="text-2xl text-center">Waiting for players...</p>
-      <PlayerList gameId={id} hostId={hostId} players={players} />
-      <GameActions id={id} hostId={hostId} players={players} />
-    </div>
+    <GameContextProvider game={data}>
+      <div className="flex flex-col gap-6">
+        <p className="text-2xl text-center">Waiting for players...</p>
+        <PlayerList />
+        <GameActions />
+      </div>
+    </GameContextProvider>
   );
 }
