@@ -4,6 +4,7 @@ import type {
   GameJoinInput,
   GameUpdateInput,
 } from "@/game/schema";
+import { generateBoard } from "@/lib/utils";
 import { prismaClient } from "@/prisma";
 
 const service = {
@@ -61,6 +62,39 @@ const service = {
   },
 
   start: async (data: GameIdParam) => {
+    const { id } = data;
+
+    const game = await prismaClient.game.findUnique({ where: { id } });
+
+    if (!game) return;
+
+    if (game.type === "BINGO") {
+      const startedGame = await prismaClient.game.update({
+        data: {
+          state: "STARTED",
+          bingos: {
+            create: {
+              history: [],
+            },
+          },
+        },
+        where: { id, hostId: game.hostId },
+        include: { bingos: true, players: true },
+      });
+
+      const bingoId = startedGame.bingos[0].id;
+
+      for (const player of startedGame.players) {
+        await prismaClient.board.create({
+          data: {
+            bingoId,
+            playerId: player.playerId,
+            cells: generateBoard(),
+          },
+        });
+      }
+    }
+
     return await prismaClient.game.update({
       where: { id: data.id },
       data: {
