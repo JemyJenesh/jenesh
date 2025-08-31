@@ -1,3 +1,4 @@
+import { bingoService } from "@/bingo/service";
 import type { GameIdParam, GameJoinInput } from "@/game/schema";
 import { gameService } from "@/game/service";
 import { playerService } from "@/player/service";
@@ -16,7 +17,14 @@ export function gameSocket(io: Server, socket: Socket) {
   });
 
   socket.on("game:start", async (data: GameIdParam) => {
-    await gameService.start(data);
+    const game = await gameService.start(data);
+
+    switch (game?.type) {
+      case "BINGO":
+      default:
+        bingoService.start(data.id);
+        break;
+    }
 
     socket.nsp.to(`game:${data.id}`).emit("game:started");
   });

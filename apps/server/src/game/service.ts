@@ -93,14 +93,9 @@ const service = {
           },
         });
       }
-    }
 
-    return await prismaClient.game.update({
-      where: { id: data.id },
-      data: {
-        state: "STARTED",
-      },
-    });
+      return startedGame;
+    }
   },
 };
 

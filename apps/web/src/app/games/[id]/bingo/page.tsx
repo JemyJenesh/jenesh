@@ -1,5 +1,7 @@
 "use client";
 
+import BingoContextProvider from "@/app/games/[id]/bingo/components/bingo-context-provider";
+import BingoHistory from "@/app/games/[id]/bingo/components/bingo-history";
 import Board from "@/app/games/[id]/bingo/components/board";
 import { usePlayer } from "@/app/games/components/player-provider";
 import Loader from "@/components/loader";
@@ -37,9 +39,12 @@ export default function Page() {
     );
   }
 
+  if (!data) return null;
+
   return (
-    <div>
+    <BingoContextProvider bingo={data}>
+      <BingoHistory />
       <Board board={data.board} />
-    </div>
+    </BingoContextProvider>
   );
 }

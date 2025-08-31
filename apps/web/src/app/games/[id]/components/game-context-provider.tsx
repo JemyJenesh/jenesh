@@ -51,12 +51,24 @@ export default function GameContextProvider(props: PropsWithChildren<Props>) {
       socket.on("game:started", () => {
         router.push(`/games/${game.id}/bingo`);
       });
+
+      socket.on("game:over", () => {
+        setGame((prev) => {
+          if (!prev) return null;
+
+          return {
+            ...prev,
+            state: "OVER",
+          };
+        });
+      });
     }
 
     return () => {
-      socket.off("connect");
+      socket.off("game:connect");
       socket.off("game:started");
       socket.off("game:joined");
+      socket.off("game:over");
     };
   }, [game, player]);
 

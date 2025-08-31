@@ -16,6 +16,11 @@ export const boardSchema = z.object({
 });
 export type Board = z.infer<typeof boardSchema>;
 
+export const bingoUpdateInputSchema = bingoSchema
+  .partial()
+  .required({ id: true });
+export type BingoUpdateInput = z.infer<typeof bingoUpdateInputSchema>;
+
 export const bingoIdParamSchema = z.object({ id: z.string() });
 export type BingoIdParam = z.infer<typeof bingoIdParamSchema>;
 
