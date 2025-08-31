@@ -1,4 +1,4 @@
-import { playerSchema } from "@/player/schema";
+import { playerSchema } from "@/schema/player";
 import { z } from "zod";
 
 export const gameTypeSchema = z.enum(["BINGO"]);

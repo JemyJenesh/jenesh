@@ -1,6 +1,7 @@
 import {
   gameCreateInputSchema,
   gameIdParamSchema,
+  gameJoinInputSchema,
   gameUpdateInputSchema,
 } from "@/game/schema";
 import { gameService } from "@/game/service";
@@ -31,6 +32,22 @@ const controller = {
     const body = gameUpdateInputSchema.parse(req.body);
 
     const data = await gameService.update(body);
+
+    return res.json(data);
+  },
+
+  join: async (req: Request, res: Response) => {
+    const body = gameJoinInputSchema.parse(req.body);
+
+    const data = await gameService.join(body);
+
+    return res.json(data);
+  },
+
+  start: async (req: Request, res: Response) => {
+    const body = gameIdParamSchema.parse(req.body);
+
+    const data = await gameService.start(body);
 
     return res.json(data);
   },

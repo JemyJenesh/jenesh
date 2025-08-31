@@ -4,9 +4,11 @@ import { usePlayer } from "@/app/games/components/player-provider";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCreateOne } from "@/hooks/api";
+import type { Game, GameCreateInput } from "@/schema/game";
 import { Loader2Icon } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type GameCardProps = {
   name: string;
@@ -22,23 +24,30 @@ export default function GameCard({
   disabled = false,
 }: GameCardProps) {
   const { player } = usePlayer();
-  const [loading, setLoading] = useState(false);
-  const buttonLabel = loading ? "Starting..." : "Play";
+  const router = useRouter();
+  const { mutate, isPending } = useCreateOne<Game, GameCreateInput>({
+    path: "/api/games",
+    queryKey: "games",
+    message: {
+      success: "Play bingo!",
+    },
+  });
+  const buttonLabel = isPending ? "Initiating..." : "Play";
 
-  const onClick = async () => {
+  const onClick = () => {
     if (!player) return;
 
-    setLoading(true);
-
-    // const game = await createGame({
-    //   type,
-    //   state: "WAITING",
-    //   hostId: player.id,
-    // });
-
-    setLoading(false);
-
-    // redirect(`/games/${game.id}`);
+    mutate(
+      {
+        type,
+        hostId: player.id,
+      },
+      {
+        onSuccess: (data) => {
+          router.push(`/games/${data.id}`);
+        },
+      }
+    );
   };
 
   return (
@@ -58,8 +67,8 @@ export default function GameCard({
       <CardHeader className="gap-0 flex justify-between pb-3">
         <CardTitle className="text-xl">{name}</CardTitle>
 
-        <Button onClick={onClick} disabled={disabled || loading}>
-          {loading && <Loader2Icon className="animate-spin" />}
+        <Button onClick={onClick} disabled={disabled || isPending}>
+          {isPending && <Loader2Icon className="animate-spin" />}
           {buttonLabel}
         </Button>
       </CardHeader>
