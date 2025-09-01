@@ -44,6 +44,11 @@ export default function BingoHistory() {
       <div className="capitalize font-semibold text-xl h-12 w-12 rounded-full border-2 border-dashed shrink-0 flex justify-center items-center animate-pulse">
         ?
       </div>
+      {history.length === 0 && (
+        <div className="capitalize font-semibold text-xl h-12 w-12 rounded-full border-2 border-dashed shrink-0 flex justify-center items-center animate-pulse">
+          ?
+        </div>
+      )}
     </div>
   );
 }

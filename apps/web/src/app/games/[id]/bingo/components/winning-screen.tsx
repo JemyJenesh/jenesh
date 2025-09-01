@@ -36,7 +36,7 @@ export default function WinningScreen() {
       />
       <p className="text-xl text-center mb-2">{winnerTitle}</p>
 
-      {!isWinner && <Board board={winnerState?.board} />}
+      {!isWinner && <Board board={winnerState?.board} alternateColor />}
     </div>
   );
 }

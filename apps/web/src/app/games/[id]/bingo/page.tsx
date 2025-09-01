@@ -47,6 +47,7 @@ export default function Page() {
       <BingoContextProvider bingo={data}>
         <BingoHistory />
         <WinningScreen />
+        <p className="text-center mt-6 mb-2">Your board</p>
         <Board board={data.board} />
       </BingoContextProvider>
     </div>

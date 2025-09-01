@@ -1,12 +1,14 @@
 import Cell from "@/app/games/[id]/bingo/components/cell";
 import { bingoMark } from "@/lib/socket/bingo";
+import { cn } from "@/lib/utils";
 import type { Board as TBoard } from "@/schema/board";
 
 type Props = {
   board: TBoard;
+  alternateColor?: boolean;
 };
 
-export default function Board({ board }: Props) {
+export default function Board({ board, alternateColor = false }: Props) {
   const cells = board.cells as string[];
   const onMark = (cell: string) => {
     bingoMark({
@@ -17,7 +19,11 @@ export default function Board({ board }: Props) {
 
   return (
     <div className="flex">
-      <div className="mx-auto border rounded-sm p-2">
+      <div
+        className={cn("mx-auto border rounded-sm p-2", {
+          "bg-primary/10": alternateColor,
+        })}
+      >
         <div className="mb-2 grid grid-cols-5">
           <div className="text-center text-xl select-none">B</div>
           <div className="text-center text-xl select-none">I</div>
