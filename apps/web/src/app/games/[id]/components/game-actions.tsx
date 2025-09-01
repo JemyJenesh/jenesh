@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useDebounce } from "@/hooks/useDebounce";
 import { gameJoin, gameStart } from "@/lib/socket/game";
 import { GamepadIcon } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export default function GameActions() {
@@ -15,6 +16,7 @@ export default function GameActions() {
   const isHost = !!(game?.hostId == player?.id);
   const isParticipant = !!players.find((p) => p.id === player?.id);
   const buttonJoinLabel = isParticipant ? "Joined" : "Join";
+  const [starting, setStarting] = useState(false);
 
   const handleCopyClick = useDebounce(async () => {
     try {
@@ -33,6 +35,7 @@ export default function GameActions() {
   };
 
   const onStart = async () => {
+    setStarting(true);
     if (!player || !game || player?.id !== game.hostId) return;
 
     gameStart({ id: game.id });
@@ -55,7 +58,9 @@ export default function GameActions() {
         </Button>
 
         {isHost ? (
-          <Button onClick={onStart}>Start</Button>
+          <Button onClick={onStart} disabled={starting}>
+            Start
+          </Button>
         ) : (
           <Button disabled={isParticipant} onClick={onJoin}>
             {buttonJoinLabel}

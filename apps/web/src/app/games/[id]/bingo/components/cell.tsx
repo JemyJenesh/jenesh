@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function Cell({ text, onMark }: Props) {
-  const { bingo } = useBingo();
+  const { bingo, winnerState } = useBingo();
   const history = bingo?.history || [];
 
   const [label, isMarkedString] = text.split("_");
@@ -20,7 +20,7 @@ export default function Cell({ text, onMark }: Props) {
   const { theme } = useTheme();
   const [marked, setMarked] = useState(isMarkedString === "1");
   const starFill = theme === "light" ? "dark-gray" : "white";
-  const isClickAble = history.includes(label) && !marked;
+  const isClickAble = history.includes(label) && !marked && !winnerState;
 
   const onClick = () => {
     if (!isClickAble) return;
