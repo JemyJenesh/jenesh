@@ -21,16 +21,16 @@ export default function BingoHistory() {
 
   return (
     <div
-      className="w-[402px] flex px-2 py-4 mb-4 gap-4 mx-auto overflow-x-auto no-scrollbar border rounded-full"
+      className="w-[288px] flex px-2 py-4 mb-4 gap-2 mx-auto overflow-x-auto no-scrollbar border rounded-full"
       ref={historyDivRef}
     >
-      {history.length < 2 && <div className="w-16 h-16 shrink-0" />}
-      {history.length < 3 && <div className="w-16 h-16 shrink-0" />}
+      {history.length < 2 && <div className="w-12 h-12 shrink-0" />}
+      {history.length < 3 && <div className="w-12 h-12 shrink-0" />}
       {history.map((item, index) => (
         <p
           key={item}
           className={cn(
-            "capitalize text-xl h-16 w-16 rounded-full border-2 shrink-0 flex justify-center items-center",
+            "capitalize font-semibold h-12 w-12 rounded-full border-2 shrink-0 flex justify-center items-center",
             {
               "border-primary/50 animate-bounce bg-primary/10":
                 index === history.length - 1,
@@ -41,7 +41,7 @@ export default function BingoHistory() {
         </p>
       ))}
       <Progress key={history[history.length - 1]} />
-      <div className="capitalize text-2xl h-16 w-16 rounded-full border-2 border-dashed shrink-0 flex justify-center items-center animate-pulse">
+      <div className="capitalize font-semibold text-xl h-12 w-12 rounded-full border-2 border-dashed shrink-0 flex justify-center items-center animate-pulse">
         ?
       </div>
     </div>

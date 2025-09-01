@@ -19,16 +19,16 @@ export default function Progress() {
     return () => clearInterval(timer);
   }, []);
 
-  const radius = 30;
+  const radius = 22;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (progress / 100) * circumference;
 
   return (
     <div className="relative flex items-center justify-center">
-      <svg className="w-16 h-16 rotate-[-90deg]">
+      <svg className="w-12 h-12 rotate-[-90deg]">
         <circle
-          cx="32"
-          cy="32"
+          cx="24"
+          cy="24"
           r={radius}
           className="stroke-zinc-200 dark:stroke-white/10"
           strokeWidth="2"
@@ -37,8 +37,8 @@ export default function Progress() {
           style={{ transition: "stroke-dashoffset 0.2s linear" }}
         />
         <circle
-          cx="32"
-          cy="32"
+          cx="24"
+          cy="24"
           r={radius}
           className="stroke-primary"
           strokeWidth="2"
@@ -50,7 +50,7 @@ export default function Progress() {
         />
       </svg>
       <div className="absolute inset-0 h-full w-full flex justify-center items-center">
-        <p className="text-2xl">?</p>
+        <p className="font-semibold text-xl">?</p>
       </div>
     </div>
   );

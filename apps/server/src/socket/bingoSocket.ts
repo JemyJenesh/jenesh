@@ -11,7 +11,7 @@ export function bingoSocket(io: Server, socket: Socket) {
     const board = await boardService.get(boardId);
 
     if (!board) return;
-    const isOver = board.bingo.game.state === "OVER";
+    const isOver = !!board.bingo.game.winnerId;
 
     const cells = board.cells as string[];
     const updateCells = cells.map((cell) =>

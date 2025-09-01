@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <div className="sticky top-0 border-b">
+    <div className="sticky top-0 border-b z-50">
       <NavigationMenu
         viewport={false}
         className="px-5 py-3 max-w-6xl mx-auto w-full flex bg-background"
