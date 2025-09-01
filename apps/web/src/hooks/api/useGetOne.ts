@@ -5,9 +5,15 @@ type QueryOptions = {
   path: string;
   queryKey: string;
   id: string;
+  enabled?: boolean;
 };
 
-export const useGetOne = <R>({ path, queryKey, id }: QueryOptions) => {
+export const useGetOne = <R>({
+  path,
+  queryKey,
+  id,
+  enabled = true,
+}: QueryOptions) => {
   return useQuery({
     queryKey: [queryKey, id],
     queryFn: async (): Promise<R> => {
@@ -15,5 +21,6 @@ export const useGetOne = <R>({ path, queryKey, id }: QueryOptions) => {
 
       return response.data;
     },
+    enabled,
   });
 };
