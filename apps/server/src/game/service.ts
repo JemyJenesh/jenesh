@@ -97,6 +97,16 @@ const service = {
       return startedGame;
     }
   },
+
+  over: async (id: string, winnerId?: string) => {
+    return await prismaClient.game.update({
+      where: { id },
+      data: {
+        state: "OVER",
+        ...(winnerId && { winnerId }),
+      },
+    });
+  },
 };
 
 export const gameService = service;

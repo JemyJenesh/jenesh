@@ -3,6 +3,7 @@
 import BingoContextProvider from "@/app/games/[id]/bingo/components/bingo-context-provider";
 import BingoHistory from "@/app/games/[id]/bingo/components/bingo-history";
 import Board from "@/app/games/[id]/bingo/components/board";
+import WinningScreen from "@/app/games/[id]/bingo/components/winning-screen";
 import { usePlayer } from "@/app/games/components/player-provider";
 import Loader from "@/components/loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -42,9 +43,12 @@ export default function Page() {
   if (!data) return null;
 
   return (
-    <BingoContextProvider bingo={data}>
-      <BingoHistory />
-      <Board board={data.board} />
-    </BingoContextProvider>
+    <div className="relative">
+      <BingoContextProvider bingo={data}>
+        <BingoHistory />
+        <WinningScreen />
+        <Board board={data.board} />
+      </BingoContextProvider>
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+import { bingoSocket } from "@/socket/bingoSocket";
 import { gameSocket } from "@/socket/gameSocket";
 import { Server } from "http";
 import { Server as Socket } from "socket.io";
@@ -17,6 +18,7 @@ export function initSocket(server: Server) {
     // console.log(`🟢 New client connected: ${socket.id}`);
 
     gameSocket(io, socket);
+    bingoSocket(io, socket);
 
     // socket.on("disconnect", () => {
     //   console.log(`🔴 Client disconnected: ${socket.id}`);

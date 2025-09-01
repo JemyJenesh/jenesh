@@ -1,4 +1,5 @@
 import Cell from "@/app/games/[id]/bingo/components/cell";
+import { bingoMark } from "@/lib/socket/bingo";
 import type { Board as TBoard } from "@/schema/board";
 
 type Props = {
@@ -7,6 +8,12 @@ type Props = {
 
 export default function Board({ board }: Props) {
   const cells = board.cells as string[];
+  const onMark = (cell: string) => {
+    bingoMark({
+      cell,
+      boardId: board.id,
+    });
+  };
 
   return (
     <div className="flex">
@@ -20,7 +27,7 @@ export default function Board({ board }: Props) {
         </div>
         <div className="grid grid-cols-5 grid-rows-5 grid-flow-col w-[312px] gap-2">
           {cells.map((cell, index) => (
-            <Cell key={index} text={cell} />
+            <Cell key={index} text={cell} onMark={onMark} />
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { boardSchema } from "@/schema/board";
 import { gameSchema } from "@/schema/game";
+import { playerSchema } from "@/schema/player";
 import { z } from "zod";
 
 export const bingoSchema = z.object({
@@ -21,5 +22,11 @@ export type BingoQueryParam = z.infer<typeof bingoQuerySchema>;
 export const bingoResponseSchema = bingoSchema.extend({
   board: boardSchema,
   game: gameSchema,
+  winnerState: z
+    .object({
+      board: boardSchema,
+      player: playerSchema,
+    })
+    .nullable(),
 });
 export type BingoResponse = z.infer<typeof bingoResponseSchema>;
